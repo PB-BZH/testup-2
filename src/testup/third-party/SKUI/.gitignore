@@ -1,0 +1,27 @@
+# Sublime Text
+*.sublime-workspace
+
+# Firebug Lite
+tools/firebug-lite/
+
+# YARD
+.yardoc
+doc/
+
+
+############
+## Windows
+############
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+
+########
+## OSX
+########
+
+.DS_Store
