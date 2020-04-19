@@ -2,27 +2,21 @@
 # License:: All Rights Reserved.
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # Utility class to capture observer events.
 class TestUpModelObserver < Sketchup::ModelObserver
-
   include TestUp::ObserverForwarder
 
   def initialize
     _set_forwarding_receiver(TC_Sketchup_Axes)
     _start_notification_trace
   end
-
 end # class
-
 
 # class Sketchup::Axes
 # http://www.sketchup.com/intl/developer/docs/ourdoc/axes
 class TC_Sketchup_Axes < TestUp::TestCase
-
   include TestUp::ObserverReceiver
 
   def setup
@@ -33,7 +27,6 @@ class TC_Sketchup_Axes < TestUp::TestCase
   def teardown
     reset_callback_data
   end
-
 
   # ========================================================================== #
   # method Sketchup::Axes.origin
@@ -50,10 +43,9 @@ class TC_Sketchup_Axes < TestUp::TestCase
 
   def test_origin_incorrect_number_of_arguments_one
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.origin(123)
+      Sketchup.active_model.axes.origin(123)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Axes.axes
@@ -74,10 +66,9 @@ class TC_Sketchup_Axes < TestUp::TestCase
 
   def test_axes_incorrect_number_of_arguments_one
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.axes(123)
+      Sketchup.active_model.axes.axes(123)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Axes.xaxis
@@ -95,10 +86,9 @@ class TC_Sketchup_Axes < TestUp::TestCase
 
   def test_xaxis_incorrect_number_of_arguments_one
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.xaxis(123)
+      Sketchup.active_model.axes.xaxis(123)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Axes.yaxis
@@ -116,10 +106,9 @@ class TC_Sketchup_Axes < TestUp::TestCase
 
   def test_yaxis_incorrect_number_of_arguments_one
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.yaxis(123)
+      Sketchup.active_model.axes.yaxis(123)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Axes.zaxis
@@ -137,10 +126,9 @@ class TC_Sketchup_Axes < TestUp::TestCase
 
   def test_zaxis_incorrect_number_of_arguments_one
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.zaxis(123)
+      Sketchup.active_model.axes.zaxis(123)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Axes.transformation
@@ -149,10 +137,10 @@ class TC_Sketchup_Axes < TestUp::TestCase
   def test_transformation_api_example
     # Point for a rectangle.
     points = [
-      Geom::Point3d.new( 0,  0, 0),
-      Geom::Point3d.new(10,  0, 0),
+      Geom::Point3d.new(0, 0, 0),
+      Geom::Point3d.new(10, 0, 0),
       Geom::Point3d.new(10, 20, 0),
-      Geom::Point3d.new( 0, 20, 0)
+      Geom::Point3d.new(0, 20, 0)
     ]
     # Transform the points so they are local to the model axes. Otherwise
     # they would be local to the model origin.
@@ -168,10 +156,9 @@ class TC_Sketchup_Axes < TestUp::TestCase
 
   def test_transformation_incorrect_number_of_arguments_one
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.transformation(123)
+      Sketchup.active_model.axes.transformation(123)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Axes.sketch_plane
@@ -193,10 +180,9 @@ class TC_Sketchup_Axes < TestUp::TestCase
 
   def test_sketch_plane_incorrect_number_of_arguments_one
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.sketch_plane(123)
+      Sketchup.active_model.axes.sketch_plane(123)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Axes.set
@@ -205,7 +191,7 @@ class TC_Sketchup_Axes < TestUp::TestCase
   def test_set_api_example
     xaxis = Geom::Vector3d.new(3, 5, 0)
     yaxis = xaxis * Z_AXIS
-    Sketchup.active_model.axes.set([10,0,0], xaxis, yaxis, Z_AXIS)
+    Sketchup.active_model.axes.set([10, 0, 0], xaxis, yaxis, Z_AXIS)
   end
 
   def test_set_axes_parent_to_model
@@ -225,10 +211,9 @@ class TC_Sketchup_Axes < TestUp::TestCase
     assert_equal(Geom::Point3d.new(10, 0, 0), origin)
 
     xaxis, yaxis, zaxis = Sketchup.active_model.axes.axes
-    assert_equal(Geom::Vector3d.new(3,  5, 0).normalize, xaxis)
+    assert_equal(Geom::Vector3d.new(3, 5, 0).normalize, xaxis)
     assert_equal(Geom::Vector3d.new(5, -3, 0).normalize, yaxis)
-    assert_equal(Geom::Vector3d.new(0,  0, 1).normalize, zaxis)
-
+    assert_equal(Geom::Vector3d.new(0, 0, 1).normalize, zaxis)
   ensure
     Sketchup.active_model.remove_observer(model_observer)
   end
@@ -250,44 +235,42 @@ class TC_Sketchup_Axes < TestUp::TestCase
     assert_equal(Geom::Point3d.new(10, 0, 0), origin)
 
     xaxis, yaxis, zaxis = page.axes.axes
-    assert_equal(Geom::Vector3d.new(3,  5, 0).normalize, xaxis)
+    assert_equal(Geom::Vector3d.new(3, 5, 0).normalize, xaxis)
     assert_equal(Geom::Vector3d.new(5, -3, 0).normalize, yaxis)
-    assert_equal(Geom::Vector3d.new(0,  0, 1).normalize, zaxis)
-
+    assert_equal(Geom::Vector3d.new(0, 0, 1).normalize, zaxis)
   ensure
     Sketchup.active_model.remove_observer(model_observer)
   end
 
   def test_set_incorrect_number_of_arguments_zero
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.set
+      Sketchup.active_model.axes.set
     end
   end
 
   def test_set_incorrect_number_of_arguments_one
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.set(ORIGIN)
+      Sketchup.active_model.axes.set(ORIGIN)
     end
   end
 
   def test_set_incorrect_number_of_arguments_two
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.set(ORIGIN, X_AXIS)
+      Sketchup.active_model.axes.set(ORIGIN, X_AXIS)
     end
   end
 
   def test_set_incorrect_number_of_arguments_three
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.set(ORIGIN, X_AXIS, Y_AXIS)
+      Sketchup.active_model.axes.set(ORIGIN, X_AXIS, Y_AXIS)
     end
   end
 
   def test_set_incorrect_number_of_arguments_five
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.set(ORIGIN, X_AXIS, Y_AXIS, Z_AXIS, X_AXIS)
+      Sketchup.active_model.axes.set(ORIGIN, X_AXIS, Y_AXIS, Z_AXIS, X_AXIS)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Axes.to_a
@@ -301,7 +284,7 @@ class TC_Sketchup_Axes < TestUp::TestCase
     result = Sketchup.active_model.axes.to_a
     assert_kind_of(Array, result)
     assert_equal(4, result.size)
-    assert_kind_of(Geom::Point3d,  result[0])
+    assert_kind_of(Geom::Point3d, result[0])
     assert_kind_of(Geom::Vector3d, result[1])
     assert_kind_of(Geom::Vector3d, result[2])
     assert_kind_of(Geom::Vector3d, result[3])
@@ -309,10 +292,9 @@ class TC_Sketchup_Axes < TestUp::TestCase
 
   def test_to_a_incorrect_number_of_arguments_one
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.to_a(123)
+      Sketchup.active_model.axes.to_a(123)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Axes.typename
@@ -330,9 +312,7 @@ class TC_Sketchup_Axes < TestUp::TestCase
 
   def test_typename_incorrect_number_of_arguments_one
     assert_raises ArgumentError do
-       Sketchup.active_model.axes.typename(123)
+      Sketchup.active_model.axes.typename(123)
     end
   end
-
-
 end # class

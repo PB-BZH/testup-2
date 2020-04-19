@@ -2,15 +2,12 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
 require "stringio"
-
 
 # class Sketchup::RenderingOptions
 # http://www.sketchup.com/intl/developer/docs/ourdoc/renderingoptions
 class TC_Sketchup_RenderingOptions < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -19,7 +16,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     # ...
   end
 
-
   def mute_puts_statements(&block)
     stdout = $stdout
     $stdout = StringIO.new
@@ -27,7 +23,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
   ensure
     $stdout = stdout
   end
-
 
   # ========================================================================== #
   # method Sketchup::RenderingOptions.[]
@@ -56,7 +51,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     assert_nil(result)
   end
 
-
   # ========================================================================== #
   # method Sketchup::RenderingOptions.[]=
   # http://www.sketchup.com/intl/developer/docs/ourdoc/renderingoptions#[]=
@@ -82,7 +76,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     assert_equal(true, result)
   end
 
-
   # ========================================================================== #
   # method Sketchup::RenderingOptions.count
   # http://www.sketchup.com/intl/developer/docs/ourdoc/renderingoptions#count
@@ -103,8 +96,8 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
   def test_count_by_key_value_pair
     skip("Implemented in SU2014") if Sketchup.version.to_i < 14
     options = Sketchup.active_model.rendering_options
-    expected_value = options['InstanceHidden']
-    result = options.count(['InstanceHidden', expected_value])
+    expected_value = options["InstanceHidden"]
+    result = options.count(["InstanceHidden", expected_value])
     assert_equal(1, result)
   end
 
@@ -116,7 +109,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     }
     assert_equal(4, result)
   end
-
 
   # ========================================================================== #
   # method Sketchup::RenderingOptions.length
@@ -142,7 +134,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::RenderingOptions.size
   # http://www.sketchup.com/intl/developer/docs/ourdoc/renderingoptions#size
@@ -167,7 +158,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::RenderingOptions.each_key
   # http://www.sketchup.com/intl/developer/docs/ourdoc/renderingoptions#each_key
@@ -185,7 +175,7 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     collection = Sketchup.active_model.rendering_options
     count = 0
     collection.each_key do |key|
-      count = count + 1
+      count += 1
     end
     expected = collection.length
     result = count
@@ -197,7 +187,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
       Sketchup.active_model.rendering_options.each_key(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::RenderingOptions.each_pair
@@ -216,7 +205,7 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     collection = Sketchup.active_model.rendering_options
     count = 0
     collection.each_pair do |key, value|
-      count = count + 1
+      count += 1
     end
     expected = collection.length
     result = count
@@ -229,7 +218,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::RenderingOptions.each
   # http://www.sketchup.com/intl/developer/docs/ourdoc/renderingoptions#each
@@ -237,9 +225,9 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
   def test_each_api_example
     mute_puts_statements {
       # API example begins here:
-      Sketchup.active_model.rendering_options.each { |key, value|
+      Sketchup.active_model.rendering_options.each do |key, value|
         puts "#{key} : #{value}"
-      }
+      end
     }
   end
 
@@ -247,7 +235,7 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     collection = Sketchup.active_model.rendering_options
     count = 0
     collection.each do |key, value|
-      count = count + 1
+      count += 1
     end
     expected = collection.length
     result = count
@@ -259,7 +247,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
       Sketchup.active_model.rendering_options.each(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::RenderingOptions.keys
@@ -356,7 +343,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::RenderingOptions.add_observer
   # http://www.sketchup.com/intl/developer/docs/ourdoc/renderingoptions#add_observer
@@ -384,7 +370,6 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
   ensure
     Sketchup.active_model.rendering_options.remove_observer(observer)
   end
-
 
   # ========================================================================== #
   # method Sketchup::RenderingOptions.remove_observer
@@ -421,11 +406,10 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
     Sketchup.active_model.rendering_options.remove_observer(observer)
   end
 
-
   # ========================================================================== #
 
   def test_constants
-    expected_constants = %w{
+    expected_constants = %w[
       ROPAssign
       ROPDrawHidden
       ROPEditComponent
@@ -478,14 +462,12 @@ class TC_Sketchup_RenderingOptions < TestUp::TestCase
       ROPSetTexture
       ROPSetTransparencyObsolete
       ROPTransparencySortMethod
-    }.sort
+    ].sort
     actual_constants = Sketchup::RenderingOptionsObserver.constants.sort
-    actual_constants.each_with_index { |constant, index|
+    actual_constants.each_with_index do |constant, index|
       expected = expected_constants[index]
       assert_equal(expected, constant.to_s)
       assert_not_nil(constant)
-    }
+    end
   end
-
-
 end # class

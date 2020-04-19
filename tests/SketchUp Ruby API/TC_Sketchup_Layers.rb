@@ -2,16 +2,13 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Sketchup::Layers
 # http://www.sketchup.com/intl/developer/docs/ourdoc/layers
 class TC_Sketchup_Layers < TestUp::TestCase
-
   def setup
-    model = start_with_empty_model()
+    model = start_with_empty_model
     5.times { |index|
       layer = model.layers.add("TestUp %02i" % index)
       create_test_tube(layer)
@@ -21,7 +18,6 @@ class TC_Sketchup_Layers < TestUp::TestCase
   def teardown
     # ...
   end
-
 
   def create_test_tube(layer)
     model = Sketchup.active_model
@@ -77,7 +73,7 @@ class TC_Sketchup_Layers < TestUp::TestCase
 
   def test_at_incorrect_number_of_arguments_zero
     assert_raises(ArgumentError) do
-      Sketchup.active_model.layers.at()
+      Sketchup.active_model.layers.at
     end
   end
 
@@ -93,7 +89,6 @@ class TC_Sketchup_Layers < TestUp::TestCase
       Sketchup.active_model.layers.at(ORIGIN)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Layers.add
@@ -136,19 +131,18 @@ class TC_Sketchup_Layers < TestUp::TestCase
   end
 
   def test_remove_invalid_argument_nil
-    # Meh! Should have been TypeError... 
+    # Meh! Should have been TypeError...
     assert_raises(ArgumentError) do
       Sketchup.active_model.layers.add(nil)
     end
   end
 
   def test_remove_invalid_argument_number
-    # Meh! Should have been TypeError... 
+    # Meh! Should have been TypeError...
     assert_raises(ArgumentError) do
       Sketchup.active_model.layers.add(123)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Layers.remove
@@ -223,7 +217,7 @@ class TC_Sketchup_Layers < TestUp::TestCase
     layer = Sketchup.active_model.layers[2]
     layer_name = layer.name
     Sketchup.active_model.layers.remove(2, true)
-     assert_equal(num_layers - 1, Sketchup.active_model.layers.size,
+    assert_equal(num_layers - 1, Sketchup.active_model.layers.size,
       "No layers erased")
     assert(Sketchup.active_model.entities.size < num_entities,
       "No entities erased")
@@ -302,7 +296,7 @@ class TC_Sketchup_Layers < TestUp::TestCase
   def test_remove_incorrect_number_of_arguments_zero
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     assert_raises(ArgumentError) do
-      Sketchup.active_model.layers.remove()
+      Sketchup.active_model.layers.remove
     end
   end
 
@@ -375,6 +369,4 @@ class TC_Sketchup_Layers < TestUp::TestCase
     assert_nil(Sketchup.active_model.layers["TestUp 02"],
       "Layer should have been removed")
   end
-
-
 end # class

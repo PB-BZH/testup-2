@@ -2,19 +2,16 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
 
 require "stringio"
 
-
 # class Sketchup::Model
 # http://www.sketchup.com/intl/developer/docs/ourdoc/model
 class TC_Sketchup_Model < TestUp::TestCase
-
   def setup
-    start_with_empty_model()
-    create_test_tube()
+    start_with_empty_model
+    create_test_tube
     Sketchup.active_model.select_tool(nil)
   end
 
@@ -23,22 +20,21 @@ class TC_Sketchup_Model < TestUp::TestCase
     Sketchup.active_model.commit_operation
   end
 
-
   def add_extra_groups_and_components
     model = Sketchup.active_model
     entities = model.active_entities
     model.start_operation("TestUp2 - Test Groups", true)
-    10.times { |i|
+    10.times do |i|
       group = entities.add_group
-      group.entities.add_face([0,0,0], [9,0,0], [9,9,0], [0,9,0])
-    }
+      group.entities.add_face([0, 0, 0], [9, 0, 0], [9, 9, 0], [0, 9, 0])
+    end
     definition = model.definitions.add("TestUp2")
-    definition.entities.add_face([0,0,0], [9,0,0], [9,9,0], [0,9,0])
-    10.times { |i|
+    definition.entities.add_face([0, 0, 0], [9, 0, 0], [9, 9, 0], [0, 9, 0])
+    10.times do |i|
       origin = ORIGIN.offset(X_AXIS, i * 10)
       tr = Geom::Transformation.new(origin)
       entities.add_instance(definition, tr)
-    }
+    end
     model.commit_operation
     nil
   end
@@ -59,17 +55,16 @@ class TC_Sketchup_Model < TestUp::TestCase
   def get_model_entities
     model = Sketchup.active_model
     entities = []
-    model.entities.each { |instance|
+    model.entities.each do |instance|
       entities << instance
       if instance.is_a?(Sketchup::Group)
         entities.concat(instance.entities.to_a)
       else
         entities.concat(instance.definition.entities.to_a)
       end
-    }
+    end
     entities
   end
-
 
   # ========================================================================== #
   # method Sketchup::Model.start_operation
@@ -88,14 +83,13 @@ class TC_Sketchup_Model < TestUp::TestCase
       "Expected warning: #{expected_warning}\nResult: #{result}")
   end
 
-
   # ========================================================================== #
   # method Sketchup::Model.close
   # http://www.sketchup.com/intl/developer/docs/ourdoc/model#close
 
   def test_close_api_example
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    discard_model_changes()
+    discard_model_changes
     # API example starts here:
     Sketchup.file_new
     model = Sketchup.active_model
@@ -104,7 +98,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_close_invalid_args
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    discard_model_changes()
+    discard_model_changes
     # The first boolean argument can really be anything since anything converts
     # to bool in Ruby. But test too many args
     Sketchup.file_new
@@ -115,7 +109,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_close
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    discard_model_changes()
+    discard_model_changes
     m0 = Sketchup.active_model
     Sketchup.file_new
     m1 = Sketchup.active_model
@@ -130,7 +124,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_close_inactive_model
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    discard_model_changes()
+    discard_model_changes
     # Inapplicable to Windows since there is one document
     skip("Not relevant for Windows") if Sketchup.platform == :platform_win
 
@@ -160,7 +154,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
     model = Sketchup.active_model
     # Look up by entityID.
-    entity_id = model.entities.add_line([0,0,0], [9,9,9]).entityID
+    entity_id = model.entities.add_line([0, 0, 0], [9, 9, 9]).entityID
     entity = model.find_entity_by_id(entity_id)
     # Look up by GUID.
     guid = model.entities.add_group.guid
@@ -192,9 +186,9 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_find_entity_by_id_entity_id_array
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    add_extra_groups_and_components()
+    add_extra_groups_and_components
 
-    entities = get_model_entities()
+    entities = get_model_entities
     ids = entities.map { |entity| entity.entityID }
 
     result = Sketchup.active_model.find_entity_by_id(ids)
@@ -206,7 +200,7 @@ class TC_Sketchup_Model < TestUp::TestCase
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     group = Sketchup.active_model.entities[0]
 
-    add_extra_groups_and_components()
+    add_extra_groups_and_components
 
     result = Sketchup.active_model.find_entity_by_id(group.guid)
     assert_equal(group, result)
@@ -214,7 +208,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_find_entity_by_id_guids
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    add_extra_groups_and_components()
+    add_extra_groups_and_components
 
     entities = Sketchup.active_model.entities.to_a
     guids = entities.map { |instance| instance.guid }
@@ -245,7 +239,7 @@ class TC_Sketchup_Model < TestUp::TestCase
   def test_find_entity_by_id_mixed_search_result_guid
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     group = Sketchup.active_model.entities[0]
-    add_extra_groups_and_components()
+    add_extra_groups_and_components
     result = Sketchup.active_model.find_entity_by_id(["", group.guid, ""])
     assert_equal([nil, group, nil], result)
   end
@@ -254,7 +248,7 @@ class TC_Sketchup_Model < TestUp::TestCase
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     group = Sketchup.active_model.entities[0]
 
-    add_extra_groups_and_components()
+    add_extra_groups_and_components
 
     guids = [group.guid] * 3
     expected = [group] * 3
@@ -264,7 +258,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_find_entity_by_id_entity_id_edge
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    entity = Sketchup.active_model.entities.add_line([0,0,0], [9,9,9])
+    entity = Sketchup.active_model.entities.add_line([0, 0, 0], [9, 9, 9])
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
     assert_equal(entity, result)
@@ -272,7 +266,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_find_entity_by_id_entity_id_face
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    entity = Sketchup.active_model.entities.add_face([0,0,0], [9,0,0], [9,9,0])
+    entity = Sketchup.active_model.entities.add_face([0, 0, 0], [9, 0, 0], [9, 9, 0])
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
     assert_equal(entity, result)
@@ -288,7 +282,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_find_entity_by_id_entity_id_component_instance
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    add_extra_groups_and_components()
+    add_extra_groups_and_components
     entity = Sketchup.active_model.entities.grep(Sketchup::ComponentInstance)[0]
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
@@ -314,7 +308,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_find_entity_by_id_entity_id_cline
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    entity = Sketchup.active_model.entities.add_cline(ORIGIN, [9,0,0])
+    entity = Sketchup.active_model.entities.add_cline(ORIGIN, [9, 0, 0])
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
     assert_equal(entity, result)
@@ -323,7 +317,8 @@ class TC_Sketchup_Model < TestUp::TestCase
   def test_find_entity_by_id_entity_id_dimension_linear
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     entity = Sketchup.active_model.entities.add_dimension_linear(
-      [50, 10, 0], [100, 10, 0], [0, 20, 0])
+      [50, 10, 0], [100, 10, 0], [0, 20, 0]
+    )
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
     assert_equal(entity, result)
@@ -336,7 +331,8 @@ class TC_Sketchup_Model < TestUp::TestCase
     edges = Sketchup.active_model.entities.add_circle(centerpoint, vector, 10)
     circle = edges[0].curve
     entity = Sketchup.active_model.entities.add_dimension_radial(
-      circle, [30, 30, 0])
+      circle, [30, 30, 0]
+    )
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
     assert_equal(entity, result)
@@ -345,7 +341,8 @@ class TC_Sketchup_Model < TestUp::TestCase
   def test_find_entity_by_id_entity_id_section_plane
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     entity = Sketchup.active_model.entities.add_section_plane(
-      [50, 50, 0], [1.0, 1.0, 0])
+      [50, 50, 0], [1.0, 1.0, 0]
+    )
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
     assert_equal(entity, result)
@@ -361,7 +358,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_find_entity_by_id_entity_id_vertex
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    entity = Sketchup.active_model.entities.add_line([0,0,0], [9,9,9]).start
+    entity = Sketchup.active_model.entities.add_line([0, 0, 0], [9, 9, 9]).start
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
     assert_equal(entity, result)
@@ -395,7 +392,7 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_find_entity_by_id_entity_id_curve
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    edges = Sketchup.active_model.entities.add_curve([0,0,0], [0,9,0], [1,9,0])
+    edges = Sketchup.active_model.entities.add_curve([0, 0, 0], [0, 9, 0], [1, 9, 0])
     entity = edges[0].curve
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
@@ -476,7 +473,7 @@ class TC_Sketchup_Model < TestUp::TestCase
   def test_find_entity_by_id_entity_id_edgeuse
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     skip("EdgeUse objects not supported")
-    face = Sketchup.active_model.entities.add_face([0,0,0], [9,0,0], [9,9,0])
+    face = Sketchup.active_model.entities.add_face([0, 0, 0], [9, 0, 0], [9, 9, 0])
     entity = face.outer_loop.edgeuses[0]
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
@@ -486,7 +483,7 @@ class TC_Sketchup_Model < TestUp::TestCase
   def test_find_entity_by_id_entity_id_loop
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     skip("Loop objects not supported")
-    face = Sketchup.active_model.entities.add_face([0,0,0], [9,0,0], [9,9,0])
+    face = Sketchup.active_model.entities.add_face([0, 0, 0], [9, 0, 0], [9, 9, 0])
     entity = face.outer_loop
 
     result = Sketchup.active_model.find_entity_by_id(entity.entityID)
@@ -591,7 +588,7 @@ class TC_Sketchup_Model < TestUp::TestCase
   def test_find_entity_by_id_incorrect_number_of_arguments
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     assert_raises(ArgumentError, "No arguments") do
-      Sketchup.active_model.find_entity_by_id()
+      Sketchup.active_model.find_entity_by_id
     end
   end
 
@@ -601,7 +598,6 @@ class TC_Sketchup_Model < TestUp::TestCase
       Sketchup.active_model.find_entity_by_id([])
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Model.find_entity_by_persistent_id
@@ -614,9 +610,9 @@ class TC_Sketchup_Model < TestUp::TestCase
     # Example Start:
 
     # Look up by persistent_id.
-    pid = model.entities.add_line([0,0,0], [9,9,9]).persistent_id
+    pid = model.entities.add_line([0, 0, 0], [9, 9, 9]).persistent_id
     entity = model.find_entity_by_persistent_id(pid)
- 
+
     # Look up multiple.
     entities = model.find_entity_by_persistent_id(id1, id2, id3)
     entities = model.find_entity_by_persistent_id([id1, id2, id3])
@@ -628,7 +624,8 @@ class TC_Sketchup_Model < TestUp::TestCase
     entity = group.entities[0]
 
     result = Sketchup.active_model.find_entity_by_persistent_id(
-        entity.persistent_id)
+      entity.persistent_id
+    )
     assert_equal(entity, result)
   end
 
@@ -638,15 +635,16 @@ class TC_Sketchup_Model < TestUp::TestCase
     entity = group.entities[0]
 
     result = Sketchup.active_model.find_entity_by_persistent_id(
-        [entity.persistent_id])
+      [entity.persistent_id]
+    )
     assert_equal([entity], result)
   end
 
   def test_find_entity_by_persistent_id_entity_id_array
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
-    add_extra_groups_and_components()
+    add_extra_groups_and_components
 
-    entities = get_model_entities()
+    entities = get_model_entities
     ids = entities.map { |entity| entity.persistent_id }
 
     result = Sketchup.active_model.find_entity_by_persistent_id(ids)
@@ -656,9 +654,9 @@ class TC_Sketchup_Model < TestUp::TestCase
 
   def test_find_entity_by_persistent_id_entity_id_multiple_arguments
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
-    add_extra_groups_and_components()
+    add_extra_groups_and_components
 
-    entities = get_model_entities()
+    entities = get_model_entities
     ids = entities.map { |entity| entity.persistent_id }
 
     result = Sketchup.active_model.find_entity_by_persistent_id(*ids)
@@ -666,17 +664,16 @@ class TC_Sketchup_Model < TestUp::TestCase
     assert_equal(entities, result)
   end
 
-
   # ========================================================================== #
   # method Sketchup::Model.instance_path_from_pid_path
 
   def test_instance_path_from_pid_path_api_example
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     points = [
-      Geom::Point3d.new( 0,  0, 0),
-      Geom::Point3d.new(10,  0, 0),
+      Geom::Point3d.new(0, 0, 0),
+      Geom::Point3d.new(10, 0, 0),
       Geom::Point3d.new(10, 20, 0),
-      Geom::Point3d.new( 0, 20, 0)
+      Geom::Point3d.new(0, 20, 0)
     ]
     model = Sketchup.active_model
     entities = model.active_entities
@@ -690,10 +687,10 @@ class TC_Sketchup_Model < TestUp::TestCase
   def test_instance_path_from_pid_path
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     points = [
-      Geom::Point3d.new( 0,  0, 0),
-      Geom::Point3d.new(10,  0, 0),
+      Geom::Point3d.new(0, 0, 0),
+      Geom::Point3d.new(10, 0, 0),
       Geom::Point3d.new(10, 20, 0),
-      Geom::Point3d.new( 0, 20, 0)
+      Geom::Point3d.new(0, 20, 0)
     ]
     model = Sketchup.active_model
     entities = model.active_entities
@@ -762,7 +759,6 @@ class TC_Sketchup_Model < TestUp::TestCase
     }
   end
 
-
   # Class to use for tool tests
   class MyTool; end
 
@@ -770,14 +766,14 @@ class TC_Sketchup_Model < TestUp::TestCase
     mytool = MyTool.new
     Sketchup.active_model.select_tool(mytool)
     assert_operator(Sketchup.active_model.tools.active_tool_id, :>, 50000,
-        "Tool ID was invalid")
+      "Tool ID was invalid")
   end
 
   def test_select_tool_default
     Sketchup.active_model.select_tool(nil)
     # This magic number is the resource ID for the select tool (ID_DRAW_SELECT)
     assert_equal(21022, Sketchup.active_model.tools.active_tool_id,
-        "Tool stack was not cleared")
+      "Tool stack was not cleared")
   end
 
   def test_select_tool_clear
@@ -785,9 +781,8 @@ class TC_Sketchup_Model < TestUp::TestCase
     Sketchup.active_model.select_tool mytool
     Sketchup.active_model.select_tool(nil)
     assert_equal(21022, Sketchup.active_model.tools.active_tool_id,
-        "Tool stack was not cleared")
+      "Tool stack was not cleared")
   end
-
 
   def test_select_tool_diff_tools
     mytool = MyTool.new
@@ -798,7 +793,7 @@ class TC_Sketchup_Model < TestUp::TestCase
     mytool2 = MyTool.new
     Sketchup.active_model.select_tool mytool2
     refute_equal(Sketchup.active_model.tools.active_tool_id, mytool_id,
-        "Tool ID did not change")
+      "Tool ID did not change")
   end
 
   def test_select_tool_same_tool_2x
@@ -812,7 +807,6 @@ class TC_Sketchup_Model < TestUp::TestCase
     # Re-add the same tool and confirm the tool ID is different
     Sketchup.active_model.select_tool mytool
     refute_equal(Sketchup.active_model.tools.active_tool_id, mytool_id,
-        "Tool ID did not change")
+      "Tool ID did not change")
   end
-
 end # class

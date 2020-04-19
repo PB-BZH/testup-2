@@ -2,23 +2,19 @@
 # License:: All Rights Reserved.
 # Original Author:: Thomas Thomassen
 
-
-require 'testup/testcase'
-
+require "testup/testcase"
 
 # class Sketchup::ClassificationSchema
 # http://www.sketchup.com/intl/developer/docs/ourdoc/classificationschema
 class TC_Sketchup_ClassificationSchema < TestUp::TestCase
-
   def setup
-    disable_read_only_flag_for_test_models()
-    open_test_model_with_multiple_schemas()
+    disable_read_only_flag_for_test_models
+    open_test_model_with_multiple_schemas
   end
 
   def teardown
-    restore_read_only_flag_for_test_models()
+    restore_read_only_flag_for_test_models
   end
-
 
   def open_test_model_with_multiple_schemas
     basename = File.basename(__FILE__, ".*")
@@ -32,12 +28,11 @@ class TC_Sketchup_ClassificationSchema < TestUp::TestCase
     # OS dependant path string.
     model = Sketchup.active_model
     if model.nil? || File.expand_path(model.path) != test_model
-      close_active_model()
+      close_active_model
       Sketchup.open_file(test_model)
     end
     Sketchup.active_model
   end
-
 
   # ========================================================================== #
   # method Sketchup::ClassificationSchema.<=>
@@ -90,7 +85,6 @@ class TC_Sketchup_ClassificationSchema < TestUp::TestCase
     assert_nil(result)
   end
 
-
   # ========================================================================== #
   # method Sketchup::ClassificationSchema.==
   # http://www.sketchup.com/intl/developer/docs/ourdoc/classificationschema#==
@@ -135,16 +129,15 @@ class TC_Sketchup_ClassificationSchema < TestUp::TestCase
     assert(schema != ORIGIN)
   end
 
-
   # ========================================================================== #
   # method Sketchup::ClassificationSchema.name
   # http://www.sketchup.com/intl/developer/docs/ourdoc/classificationschema#name
 
   def test_name_api_example
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    Sketchup.active_model.classifications.each { |schema|
+    Sketchup.active_model.classifications.each do |schema|
       puts schema.name
-    }
+    end
   end
 
   def test_name
@@ -162,16 +155,15 @@ class TC_Sketchup_ClassificationSchema < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::ClassificationSchema.namespace
   # http://www.sketchup.com/intl/developer/docs/ourdoc/classificationschema#namespace
 
   def test_namespace_api_example
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    Sketchup.active_model.classifications.each { |schema|
+    Sketchup.active_model.classifications.each do |schema|
       puts schema.namespace
-    }
+    end
   end
 
   def test_namespace
@@ -188,6 +180,4 @@ class TC_Sketchup_ClassificationSchema < TestUp::TestCase
       schema.namespace(1)
     end
   end
-
-
 end # class

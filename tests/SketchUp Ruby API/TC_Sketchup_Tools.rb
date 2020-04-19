@@ -2,16 +2,13 @@
 # License:: The MIT License (MIT)
 # Original Author:: Paul Ballew
 
-
 require "testup/testcase"
 
 require "stringio"
 
-
 # class Sketchup::Tools
 # http://www.sketchup.com/intl/developer/docs/ourdoc/tools
 class TC_Sketchup_Tools < TestUp::TestCase
-
   def setup
     Sketchup.active_model.select_tool nil
   end
@@ -28,7 +25,7 @@ class TC_Sketchup_Tools < TestUp::TestCase
     mytool = MyTool.new
     Sketchup.active_model.tools.push_tool(mytool)
     assert_operator(Sketchup.active_model.tools.active_tool_id, :>, 50000,
-        "Tool ID was invalid")
+      "Tool ID was invalid")
   end
 
   def test_push_tool_pop
@@ -37,7 +34,7 @@ class TC_Sketchup_Tools < TestUp::TestCase
     Sketchup.active_model.tools.pop_tool
     # This magic number is the resource ID for the select tool ()ID_DRAW_SELECT)
     assert_equal(21022, Sketchup.active_model.tools.active_tool_id,
-        "Tool stack was not cleared")
+      "Tool stack was not cleared")
   end
 
   def test_push_tool_same_tool_x2
@@ -62,5 +59,4 @@ class TC_Sketchup_Tools < TestUp::TestCase
 
     refute_equal(mytool_id, mytool_id2, "Tool ID did not change")
   end
-
 end # class

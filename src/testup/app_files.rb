@@ -5,22 +5,19 @@
 #
 #-------------------------------------------------------------------------------
 
-require 'fileutils'
-require 'testup/system_files.rb'
-
+require "fileutils"
+require "testup/system_files.rb"
 
 module TestUp
-module AppFiles
+  module AppFiles
+    include SystemFiles
 
-  include SystemFiles
+    def log_path
+      ensure_exist(app_data(PLUGIN_NAME, "Logs"))
+    end
 
-  def log_path
-    ensure_exist(app_data(PLUGIN_NAME, 'Logs'))
-  end
-
-  def saved_runs_path
-    ensure_exist(app_data(PLUGIN_NAME, 'Saved Runs'))
-  end
-
-end # module
+    def saved_runs_path
+      ensure_exist(app_data(PLUGIN_NAME, "Saved Runs"))
+    end
+  end # module
 end # module TestUp

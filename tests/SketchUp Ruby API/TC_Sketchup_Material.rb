@@ -2,23 +2,19 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Sketchup::Material
 # http://www.sketchup.com/intl/developer/docs/ourdoc/material
 class TC_Sketchup_Material < TestUp::TestCase
-
   def setup
-    disable_read_only_flag_for_test_models()
-    open_test_model()
+    disable_read_only_flag_for_test_models
+    open_test_model
   end
 
   def teardown
-    restore_read_only_flag_for_test_models()
+    restore_read_only_flag_for_test_models
   end
-
 
   # TODO(thomthom): Move to TestUp2 utility methods and merge with
   # TC_Sketchup_Classifications.
@@ -34,12 +30,11 @@ class TC_Sketchup_Material < TestUp::TestCase
     # OS dependant path string.
     model = Sketchup.active_model
     if model.nil? || File.expand_path(model.path) != test_model
-      close_active_model()
+      close_active_model
       Sketchup.open_file(test_model)
     end
     Sketchup.active_model
   end
-
 
   # ========================================================================== #
   # method Sketchup::Material.colorize_deltas
@@ -84,9 +79,9 @@ class TC_Sketchup_Material < TestUp::TestCase
     assert_kind_of(Float, result[0])
     assert_kind_of(Float, result[1])
     assert_kind_of(Float, result[2])
-    assert_in_delta(-124.15384917569565,    result[0], SKETCHUP_FLOAT_TOLERANCE)
+    assert_in_delta(-124.15384917569565, result[0], SKETCHUP_FLOAT_TOLERANCE)
     assert_in_delta(-0.0019607990980148315, result[1], SKETCHUP_FLOAT_TOLERANCE)
-    assert_in_delta( 0.27996034147878235,   result[2], SKETCHUP_FLOAT_TOLERANCE)
+    assert_in_delta(0.27996034147878235, result[2], SKETCHUP_FLOAT_TOLERANCE)
   end
 
   def test_colorize_deltas_colorized_textured_material_tinted
@@ -98,9 +93,9 @@ class TC_Sketchup_Material < TestUp::TestCase
     assert_kind_of(Float, result[0])
     assert_kind_of(Float, result[1])
     assert_kind_of(Float, result[2])
-    assert_in_delta(38.04878252219892,     result[0], SKETCHUP_FLOAT_TOLERANCE)
+    assert_in_delta(38.04878252219892, result[0], SKETCHUP_FLOAT_TOLERANCE)
     assert_in_delta(0.0039215534925460815, result[1], SKETCHUP_FLOAT_TOLERANCE)
-    assert_in_delta(0.3604408195287968,    result[2], SKETCHUP_FLOAT_TOLERANCE)
+    assert_in_delta(0.3604408195287968, result[2], SKETCHUP_FLOAT_TOLERANCE)
   end
 
   def test_colorize_deltas_incorrect_number_of_arguments_one
@@ -109,7 +104,6 @@ class TC_Sketchup_Material < TestUp::TestCase
       material.colorize_deltas(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Material.colorize_type
@@ -156,7 +150,6 @@ class TC_Sketchup_Material < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::Material.colorize_type=
   # http://www.sketchup.com/intl/developer/docs/ourdoc/material#colorize_type=
@@ -166,7 +159,7 @@ class TC_Sketchup_Material < TestUp::TestCase
     material = Sketchup.active_model.materials[0]
     material.colorize_type = Sketchup::Material::COLORIZE_TINT
   ensure
-    discard_model_changes()
+    discard_model_changes
   end
 
   def test_colorize_type_Set_solid_material
@@ -176,7 +169,7 @@ class TC_Sketchup_Material < TestUp::TestCase
     result = material.colorize_type
     assert_equal(Sketchup::Material::COLORIZE_TINT, result)
   ensure
-    discard_model_changes()
+    discard_model_changes
   end
 
   def test_colorize_type_Set_textured_material
@@ -186,7 +179,7 @@ class TC_Sketchup_Material < TestUp::TestCase
     result = material.colorize_type
     assert_equal(Sketchup::Material::COLORIZE_TINT, result)
   ensure
-    discard_model_changes()
+    discard_model_changes
   end
 
   def test_colorize_type_Set_colorized_textured_material_shifted
@@ -196,7 +189,7 @@ class TC_Sketchup_Material < TestUp::TestCase
     result = material.colorize_type
     assert_equal(Sketchup::Material::COLORIZE_TINT, result)
   ensure
-    discard_model_changes()
+    discard_model_changes
   end
 
   def test_colorize_type_Set_colorized_textured_material_tinted
@@ -206,7 +199,7 @@ class TC_Sketchup_Material < TestUp::TestCase
     result = material.colorize_type
     assert_equal(Sketchup::Material::COLORIZE_SHIFT, result)
   ensure
-    discard_model_changes()
+    discard_model_changes
   end
 
   def test_colorize_type_Set_invalid_argument_nil
@@ -215,7 +208,7 @@ class TC_Sketchup_Material < TestUp::TestCase
       material.colorize_type = nil
     end
   ensure
-    discard_model_changes()
+    discard_model_changes
   end
 
   def test_colorize_type_Set_invalid_argument_point
@@ -224,7 +217,7 @@ class TC_Sketchup_Material < TestUp::TestCase
       material.colorize_type = ORIGIN
     end
   ensure
-    discard_model_changes()
+    discard_model_changes
   end
 
   def test_colorize_type_Set_invalid_argument_string
@@ -233,7 +226,7 @@ class TC_Sketchup_Material < TestUp::TestCase
       material.colorize_type = "FooBar"
     end
   ensure
-    discard_model_changes()
+    discard_model_changes
   end
 
   def test_colorize_type_Set_invalid_argument_negative_integer
@@ -242,7 +235,7 @@ class TC_Sketchup_Material < TestUp::TestCase
       material.colorize_type = -1
     end
   ensure
-    discard_model_changes()
+    discard_model_changes
   end
 
   def test_colorize_type_Set_invalid_argument_invalid_enum
@@ -251,9 +244,8 @@ class TC_Sketchup_Material < TestUp::TestCase
       material.colorize_type = 3
     end
   ensure
-    discard_model_changes()
+    discard_model_changes
   end
-
 
   # ========================================================================== #
   # method Sketchup::Material.materialType
@@ -315,21 +307,20 @@ class TC_Sketchup_Material < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::Material.save_as
 
   def test_save_as_api_example
-    filename = File.join(ENV['HOME'], 'Desktop', 'su_test.skm')
+    filename = File.join(ENV["HOME"], "Desktop", "su_test.skm")
     materials = Sketchup.active_model.materials
     material = materials.add("Hello World")
-    material.color = 'red'
+    material.color = "red"
     material.save_as(filename)
   end
 
   def test_save_as
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
-    filename = File.join(Sketchup.temp_dir, 'TC_Sketchup_Material_save_as.skm')
+    filename = File.join(Sketchup.temp_dir, "TC_Sketchup_Material_save_as.skm")
     material = Sketchup.active_model.materials["Solid"]
     # Make sure there isn't an old version.
     File.delete(filename) if File.exist?(filename)
@@ -370,9 +361,7 @@ class TC_Sketchup_Material < TestUp::TestCase
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     material = Sketchup.active_model.materials["Solid"]
     assert_raises(ArgumentError) do
-      material.save_as('foo', 'bar')
+      material.save_as("foo", "bar")
     end
   end
-
-
 end # class

@@ -2,23 +2,19 @@
 # License:: All Rights Reserved.
 # Original Author:: Bugra Barin
 
-
-require 'testup/testcase'
-
+require "testup/testcase"
 
 # class Sketchup::Classifications
 # http://www.sketchup.com/intl/developer/docs/ourdoc/classifications
 class TC_Sketchup_Classifications < TestUp::TestCase
-
   def setup
-    disable_read_only_flag_for_test_models()
-    open_test_model_with_multiple_schemas()
+    disable_read_only_flag_for_test_models
+    open_test_model_with_multiple_schemas
   end
 
   def teardown
-    restore_read_only_flag_for_test_models()
+    restore_read_only_flag_for_test_models
   end
-
 
   def open_test_model_with_multiple_schemas
     basename = File.basename(__FILE__, ".*")
@@ -32,12 +28,11 @@ class TC_Sketchup_Classifications < TestUp::TestCase
     # OS dependant path string.
     model = Sketchup.active_model
     if model.nil? || File.expand_path(model.path) != test_model
-      close_active_model()
+      close_active_model
       Sketchup.open_file(test_model)
     end
     Sketchup.active_model
   end
-
 
   # ========================================================================== #
   # method Sketchup::Classifications.[]
@@ -65,7 +60,7 @@ class TC_Sketchup_Classifications < TestUp::TestCase
     assert_kind_of(Sketchup::ClassificationSchema, schema)
     # TODO(thomthom): The returned schema seem to differ from debug to release,
     # from x86 to x64.
-    #assert_equal("gbXML", schema.name)
+    # assert_equal("gbXML", schema.name)
   end
 
   def test_Operator_Get_integer_negative_index
@@ -102,25 +97,24 @@ class TC_Sketchup_Classifications < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::Classifications.each
   # http://www.sketchup.com/intl/developer/docs/ourdoc/classifications#each
 
   def test_each_api_example
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    Sketchup.active_model.classifications.each { |schema|
+    Sketchup.active_model.classifications.each do |schema|
       puts schema.name
-    }
+    end
   end
 
   def test_each
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     schema_iterated = []
-    Sketchup.active_model.classifications.each { |schema|
+    Sketchup.active_model.classifications.each do |schema|
       assert_kind_of(Sketchup::ClassificationSchema, schema)
       schema_iterated << schema.name
-    }
+    end
     assert_equal(3, schema_iterated.size, "Incorrect number of schemas")
     expected_schemas = [
       "CityGML 2.0",
@@ -137,7 +131,6 @@ class TC_Sketchup_Classifications < TestUp::TestCase
       c.each(1) {}
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Classifications.keys
@@ -168,7 +161,6 @@ class TC_Sketchup_Classifications < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::Classifications.length
   # http://www.sketchup.com/intl/developer/docs/ourdoc/classifications#length
@@ -190,17 +182,16 @@ class TC_Sketchup_Classifications < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::Classifications.load_schema
   # http://www.sketchup.com/intl/developer/docs/ourdoc/classifications#load_schema
 
   def test_load_schema_api_example
     c = Sketchup.active_model.classifications
-    file = Sketchup.find_support_file('ifcXML4.xsd', 'Classifications')
-    status = c.load_schema(file) if !file.nil?
+    file = Sketchup.find_support_file("ifcXML4.xsd", "Classifications")
+    status = c.load_schema(file) unless file.nil?
   ensure
-    close_active_model()
+    close_active_model
   end
 
   def test_load_schema
@@ -210,7 +201,7 @@ class TC_Sketchup_Classifications < TestUp::TestCase
       assert_nil(classifications["IFC 2x3"])
     end
 
-    file = Sketchup.find_support_file('IFC 2x3.skc', 'Classifications')
+    file = Sketchup.find_support_file("IFC 2x3.skc", "Classifications")
     status = classifications.load_schema(file)
     assert(status)
     if Sketchup.version.to_i >= 15
@@ -218,7 +209,7 @@ class TC_Sketchup_Classifications < TestUp::TestCase
       assert_equal("IFC 2x3", schema.name)
     end
   ensure
-    close_active_model()
+    close_active_model
   end
 
   def test_load_schema_bad_params
@@ -227,13 +218,12 @@ class TC_Sketchup_Classifications < TestUp::TestCase
       c.load_schema
     end
     assert_raises ArgumentError do
-      c.load_schema(1,1)
+      c.load_schema(1, 1)
     end
     assert_raises ArgumentError do
-      c.load_schema('','','')
+      c.load_schema("", "", "")
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Classifications.size
@@ -256,31 +246,30 @@ class TC_Sketchup_Classifications < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::Classifications.unload_schema
   # http://www.sketchup.com/intl/developer/docs/ourdoc/classifications#unload_schema
 
   def test_unload_schema_api_example
     c = Sketchup.active_model.classifications
-    status = c.unload_schema('IFC 2x3')
+    status = c.unload_schema("IFC 2x3")
   ensure
-    close_active_model()
+    close_active_model
   end
 
   def test_unload_schema
     skip("Test functional in SU2015+") if Sketchup.version.to_i < 15
     classifications = Sketchup.active_model.classifications
-    file = Sketchup.find_support_file('IFC 2x3.skc', 'Classifications')
+    file = Sketchup.find_support_file("IFC 2x3.skc", "Classifications")
     classifications.load_schema(file)
     schema = classifications["IFC 2x3"]
     assert_equal("IFC 2x3", schema.name, "Schema not loaded")
 
-    status = classifications.unload_schema('IFC 2x3')
+    status = classifications.unload_schema("IFC 2x3")
     assert(status)
     assert_nil(classifications["IFC 2x3"])
   ensure
-    close_active_model()
+    close_active_model
   end
 
   def test_unload_schema_bad_params
@@ -292,8 +281,7 @@ class TC_Sketchup_Classifications < TestUp::TestCase
       c.unload_schema(1)
     end
     assert_raises ArgumentError do
-      c.unload_schema('','')
+      c.unload_schema("", "")
     end
   end
-
 end # class

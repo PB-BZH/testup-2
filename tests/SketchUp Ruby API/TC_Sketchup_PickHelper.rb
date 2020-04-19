@@ -7,11 +7,10 @@ require "testup/testcase"
 # class Sketchup::PickHelper
 # http://www.sketchup.com/intl/en/developer/docs/ourdoc/pickhelper
 class TC_Sketchup_PickHelper < TestUp::TestCase
-
   def setup
-    start_with_empty_model()
+    start_with_empty_model
     setup_camera
-    
+
     # Handy variables
     @pick_helper = Sketchup.active_model.active_view.pick_helper
     @origin_point = Geom::Point3d.new(0, 0, 0)
@@ -28,24 +27,24 @@ class TC_Sketchup_PickHelper < TestUp::TestCase
   end
 
   def setup_camera
-    eye = [50,-50,100]
-    target = [50,0,0]
-    up = [0,1,0]
+    eye = [50, -50, 100]
+    target = [50, 0, 0]
+    up = [0, 1, 0]
     Sketchup.active_model.active_view.camera.set(eye, target, up)
   end
-  
+
   def add_window_pick_data
     # Put some stuff in the model
     entities = Sketchup.active_model.active_entities
-    entities.add_face([0,0,0], [100,0,0], [100,100,0], [0,100,0])
-    entities.add_edges([1,1,1], [2,2,2])
+    entities.add_face([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
+    entities.add_edges([1, 1, 1], [2, 2, 2])
   end
 
   def add_boundingbox
     @boundingbox = Geom::BoundingBox.new
     @boundingbox.add([-10, -10, -10], [10, 10, 10])
   end
-  
+
   def add_inside_edges
     entities = Sketchup.active_model.active_entities
     entities.add_edges([1, 0, 0], [2, 0, 0])
@@ -70,29 +69,28 @@ class TC_Sketchup_PickHelper < TestUp::TestCase
     entities.add_edges([0, -11, 0], [0, -13, 0])
     entities.add_edges([0, 0, -11], [0, 0, -13])
   end
-  
+
   def add_inside_group
     # Inside group
     group = Sketchup.active_model.entities.add_group
     entities = group.entities
-    entities.add_face([1,1,2], [5,1,2], [5,5,2], [1,5,2])
+    entities.add_face([1, 1, 2], [5, 1, 2], [5, 5, 2], [1, 5, 2])
   end
 
   def add_crossing_group
     group = Sketchup.active_model.entities.add_group
     entities = group.entities
-    entities.add_face([1,1,5], [5,1,5], [5,5,5], [1,5,5])
-    entities.add_face([6,6,5], [12,6,5], [12,12,5], [6,12,5])
+    entities.add_face([1, 1, 5], [5, 1, 5], [5, 5, 5], [1, 5, 5])
+    entities.add_face([6, 6, 5], [12, 6, 5], [12, 12, 5], [6, 12, 5])
   end
 
-  
   # ========================================================================== #
   # method Sketchup::PickHelper.window_pick
   # http://www.sketchup.com/intl/developer/docs/ourdoc/pickhelper#window_pick
 
   def test_window_pick_api_example
     entities = Sketchup.active_model.active_entities
-    face = entities.add_face([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    face = entities.add_face([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     ph = Sketchup.active_model.active_view.pick_helper
     start_point = Geom::Point3d.new(100, 100, 0)
     end_point = Geom::Point3d.new(500, 500, 0)
@@ -170,34 +168,34 @@ class TC_Sketchup_PickHelper < TestUp::TestCase
     assert_equal(expected_count, num_picked)
     assert_equal(expected_count, @pick_helper.all_picked.count)
   end
-  
+
   def test_window_pick_with_group
     add_window_pick_data
     group = Sketchup.active_model.entities.add_group
     entities = group.entities
-    face = entities.add_face([20,0,10], [30,0,10], [30,10,10], [20,10,10])
+    face = entities.add_face([20, 0, 10], [30, 0, 10], [30, 10, 10], [20, 10, 10])
 
     generic_window_pick_test(@start_point, @end_point, Sketchup::PickHelper::PICK_CROSSING, 5)
-    assert_kind_of(Sketchup::Group, @pick_helper.all_picked()[4])
+    assert_kind_of(Sketchup::Group, @pick_helper.all_picked[4])
   end
 
   # ========================================================================== #
   # method Sketchup::PickHelper.boundingbox_pick
   # http://www.sketchup.com/intl/developer/docs/ourdoc/pickhelper#boundingbox_pick
   def test_boundingbox_pick_api_example
-     boundingbox = Geom::BoundingBox.new
-     boundingbox.add([1, 1, 1], [100, 100, 100])
-     ph = Sketchup.active_model.active_view.pick_helper
- 
-     # Rotate the box 45' around the z-axis
-     angle = 45
-     transformation = Geom::Transformation.new(ORIGIN, Z_AXIS, angle)
+    boundingbox = Geom::BoundingBox.new
+    boundingbox.add([1, 1, 1], [100, 100, 100])
+    ph = Sketchup.active_model.active_view.pick_helper
 
-     num_picked = ph.boundingbox_pick(boundingbox, Sketchup::PickHelper::PICK_CROSSING, transformation)
-     if num_picked > 0
-       Sketchup.active_model.selection.add(ph.all_picked)
-     end
-   end
+    # Rotate the box 45' around the z-axis
+    angle = 45
+    transformation = Geom::Transformation.new(ORIGIN, Z_AXIS, angle)
+
+    num_picked = ph.boundingbox_pick(boundingbox, Sketchup::PickHelper::PICK_CROSSING, transformation)
+    if num_picked > 0
+      Sketchup.active_model.selection.add(ph.all_picked)
+    end
+  end
 
   def test_boundingbox_pick_inside
     add_boundingbox
@@ -250,24 +248,24 @@ class TC_Sketchup_PickHelper < TestUp::TestCase
     add_outside_edges
     assert_equal(2, num_picked)
   end
-  
+
   def test_boundingbox_pick_rotated_box
     add_boundingbox
     add_outside_edges
     # Rotate the box 45' around the z-axis
-    pt = Geom::Point3d.new(0,0,0)
-    axis = vector = Geom::Vector3d.new(0,0,1)
+    pt = Geom::Point3d.new(0, 0, 0)
+    axis = vector = Geom::Vector3d.new(0, 0, 1)
     angle = 45
     transformation = Geom::Transformation.new(pt, axis, angle)
     # This should get the outside edges on the x/y plane
     num_picked = @pick_helper.boundingbox_pick(@boundingbox, Sketchup::PickHelper::PICK_CROSSING, transformation)
     assert_equal(4, num_picked)
   end
-  
+
   def test_boundingbox_pick_invalid_boundingbox
     num_picked = 0
     assert_raises(TypeError) do
-      num_picked = @pick_helper.boundingbox_pick('', 999)
+      num_picked = @pick_helper.boundingbox_pick("", 999)
     end
     assert_equal(0, num_picked)
   end
@@ -289,5 +287,4 @@ class TC_Sketchup_PickHelper < TestUp::TestCase
     end
     assert_equal(0, num_picked)
   end
-
 end # class

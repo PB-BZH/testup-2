@@ -1,5 +1,6 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 group :development do
-  gem 'sketchup-api-stubs'
+  gem "minitest" # Not needed for the stubs, but useful for tests.
+  gem "sketchup-api-stubs"
 end

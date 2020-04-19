@@ -2,43 +2,32 @@
 # License:: All Rights Reserved.
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Sketchup::DefinitionList
 # http://www.sketchup.com/intl/developer/docs/ourdoc/definitionlist
 class TC_Sketchup_DefinitionList < TestUp::TestCase
-
   def setup
-    start_with_empty_model()
+    start_with_empty_model
   end
 
   def teardown
     # ...
   end
 
-
   class TestUpEvilEntityObserver < Sketchup::EntityObserver
-
     def onChangeEntity(entity)
       puts "#{self.class.name}.onChangeEntity(#{entity})"
       Sketchup.active_model.definitions.purge_unused
     end
-
   end # class
 
-
   class TestUpEvilDefinitionsObserver < Sketchup::DefinitionsObserver
-
     def onComponentAdded(definitions, definition)
       puts "#{self.class.name}.onComponentAdded(#{definition})"
       definitions.purge_unused
     end
-
   end # class
-
-
 
   # ========================================================================== #
   # method Sketchup::DefinitionList.add
@@ -62,6 +51,4 @@ class TC_Sketchup_DefinitionList < TestUp::TestCase
   ensure
     model.definitions.remove_observer(observer) if definition.valid?
   end
-
-
 end # class

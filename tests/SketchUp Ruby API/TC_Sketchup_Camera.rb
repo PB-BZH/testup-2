@@ -2,14 +2,11 @@
 # License:: All Rights Reserved.
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Sketchup::Camera
 # http://www.sketchup.com/intl/developer/docs/ourdoc/camera
 class TC_Sketchup_Camera < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -18,7 +15,6 @@ class TC_Sketchup_Camera < TestUp::TestCase
     camera = Sketchup.active_model.active_view.camera
     camera.aspect_ratio = 0.0
   end
-
 
   # ========================================================================== #
   # method Sketchup::Camera.fov_is_height?
@@ -60,7 +56,6 @@ class TC_Sketchup_Camera < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::Camera.is_2d?
   # http://www.sketchup.com/intl/developer/docs/ourdoc/camera#is_2d?
@@ -98,7 +93,6 @@ class TC_Sketchup_Camera < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::Camera.center_2d
   # http://www.sketchup.com/intl/developer/docs/ourdoc/camera#center_2d
@@ -124,7 +118,6 @@ class TC_Sketchup_Camera < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::Camera.scale_2d
   # http://www.sketchup.com/intl/developer/docs/ourdoc/camera#scale_2d
@@ -149,6 +142,4 @@ class TC_Sketchup_Camera < TestUp::TestCase
       camera.scale_2d(123)
     end
   end
-
-
 end # class

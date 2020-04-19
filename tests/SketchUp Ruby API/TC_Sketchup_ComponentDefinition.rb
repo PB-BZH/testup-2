@@ -2,16 +2,13 @@
 # License:: All Rights Reserved.
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Sketchup::ComponentDefinition
 # http://www.sketchup.com/intl/developer/docs/ourdoc/componentdefinition
 class TC_Sketchup_ComponentDefinition < TestUp::TestCase
-
   def setup
-    start_with_empty_model()
+    start_with_empty_model
     # Ensure "IFC 2x3" is loaded.
     file = Sketchup.find_support_file("IFC 2x3.skc", "Classifications")
     Sketchup.active_model.classifications.load_schema(file)
@@ -21,26 +18,19 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
     # ...
   end
 
-
   class TestUpEvilEntityObserver < Sketchup::EntityObserver
-
     def onChangeEntity(entity)
       puts "#{self.class.name}.onChangeEntity(#{entity})"
       Sketchup.active_model.definitions.purge_unused
     end
-
   end # class
 
-
   class TestUpEvilDefinitionsObserver < Sketchup::DefinitionsObserver
-
     def onComponentPropertiesChanged(definitions, definition)
       puts "#{self.class.name}.onComponentPropertiesChanged(#{definition})"
       definitions.purge_unused
     end
-
   end # class
-
 
   def create_test_image
     entities = Sketchup.active_model.entities
@@ -59,7 +49,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
   end
 
   def create_classified_test_instance
-    instance = create_test_instance()
+    instance = create_test_instance
     instance.definition.add_classification("IFC 2x3", "IfcDoor")
     # TODO(thomthom): Replace with set_classification_value when implemented.
     schema = instance.definition.attribute_dictionary("IFC 2x3", false)
@@ -85,7 +75,6 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
     nil
   end
 
-
   # ========================================================================== #
   # method Sketchup::ComponentDefinition.count_used_instances
   # http://www.sketchup.com/intl/developer/docs/ourdoc/componentdefinition#count_used_instances
@@ -93,8 +82,8 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
   def test_count_used_instances_api_example
     skip("Implemented in SU2016") if Sketchup.version.to_i < 16
 
-    path = Sketchup.find_support_file('Bed.skp',
-      'Components/Components Sampler/')
+    path = Sketchup.find_support_file("Bed.skp",
+      "Components/Components Sampler/")
     definitions = Sketchup.active_model.definitions
     definition = definitions.load(path)
     number = definition.count_used_instances
@@ -107,12 +96,12 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
     definitions = model.definitions
 
     # Create a definition but don't add it to the model.
-    definition1 = definitions.add('Foo')
+    definition1 = definitions.add("Foo")
     definition1.entities.add_cpoint(ORIGIN)
     assert_equal(0, definition1.count_used_instances)
 
     # Create a new definition and add the first one a couple of time.
-    definition2 = definitions.add('Foo')
+    definition2 = definitions.add("Foo")
     definition2.entities.add_cpoint(ORIGIN)
     definition2.entities.add_instance(definition1, ORIGIN)
     definition2.entities.add_instance(definition1, ORIGIN)
@@ -132,13 +121,12 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
     model = Sketchup.active_model
     definitions = model.definitions
-    definition = definitions.add('Foo')
+    definition = definitions.add("Foo")
     definition.entities.add_cpoint(ORIGIN)
     assert_raises(ArgumentError) do
       definition.count_used_instances(123)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::ComponentDefinition.load
@@ -163,7 +151,6 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
   ensure
     model.definitions.remove_observer(observer)
   end
-
 
   # ========================================================================== #
   # method Sketchup::ComponentDefinition.name=
@@ -211,14 +198,13 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
     model.definitions.remove_observer(observer)
   end
 
-
   # ========================================================================== #
   # method Sketchup::ComponentDefinition.add_classification
   # http://www.sketchup.com/intl/developer/docs/ourdoc/componentdefinition#add_classification
 
   def test_add_classification_api_example
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    create_test_instance()
+    create_test_instance
     # API Example starts here:
     definition = Sketchup.active_model.definitions.first
     definition.add_classification("IFC 2x3", "IfcDoor")
@@ -226,7 +212,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_success
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     result = definition.add_classification("IFC 2x3", "IfcDoor")
     assert(result)
     dictionary = definition.attribute_dictionary("IFC 2x3", false)
@@ -235,7 +221,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_failure
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     result = definition.add_classification("FooBar", "IfcDoor")
     assert_equal(false, result)
     dictionaries = definition.attribute_dictionaries
@@ -244,7 +230,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_failure_image_definition
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    create_test_image()
+    create_test_image
     definition = Sketchup.active_model.definitions.first
     assert(definition.image?, "Failed to set up test.")
     result = definition.add_classification("FooBar", "IfcDoor")
@@ -255,7 +241,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_incorrect_number_of_arguments_zero
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises ArgumentError do
       definition.add_classification
     end
@@ -263,7 +249,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_incorrect_number_of_arguments_one
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises ArgumentError do
       definition.add_classification("IFC 2x3")
     end
@@ -271,7 +257,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_incorrect_number_of_arguments_thee
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises ArgumentError do
       definition.add_classification("IFC 2x3", "IfcDoor", "BogusArgument")
     end
@@ -279,7 +265,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_invalid_first_argument_nil
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.add_classification(nil, "IfcDoor")
     end
@@ -287,7 +273,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_invalid_second_argument_nil
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.add_classification("IFC 2x3", nil)
     end
@@ -295,7 +281,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_invalid_first_argument_number
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.add_classification(3.14, "IfcDoor")
     end
@@ -303,7 +289,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_invalid_second_argument_number
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.add_classification("IFC 2x3", 3.14)
     end
@@ -311,7 +297,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_invalid_first_argument_point
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.add_classification(ORIGIN, "IfcDoor")
     end
@@ -319,12 +305,11 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_add_classification_invalid_second_argument_point
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.add_classification("IFC 2x3", ORIGIN)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::ComponentDefinition.get_classification_value
@@ -332,7 +317,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_get_classification_value_api_example
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    create_test_instance()
+    create_test_instance
     # API Example starts here:
     entities = Sketchup.active_model.entities
     definition = entities.grep(Sketchup::ComponentInstance).first.definition
@@ -344,7 +329,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_get_classification_value_string
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     path = ["IFC 2x3", "IfcDoor", "ObjectType", "IfcLabel"]
     value = definition.get_classification_value(path)
@@ -354,7 +339,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_get_classification_value_invalid_key
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     path = ["ClassifierPathToHeaven"]
     value = definition.get_classification_value(path)
@@ -363,7 +348,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_get_classification_image_definition
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    create_test_image()
+    create_test_image
     definition = Sketchup.active_model.definitions.first
     assert(definition.image?, "Failed to set up test.")
 
@@ -374,16 +359,16 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_get_classification_value_incorrect_number_of_arguments_zero
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises ArgumentError do
-      definition.get_classification_value()
+      definition.get_classification_value
     end
   end
 
   def test_get_classification_value_incorrect_number_of_arguments_two
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises ArgumentError do
       definition.get_classification_value(["IFC 2x3", "IfcDoor"], "Two")
@@ -392,7 +377,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_get_classification_value_invalid_arguments_string
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises TypeError do
       definition.get_classification_value("IFC 2x3")
@@ -401,7 +386,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_get_classification_value_invalid_arguments_number
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises TypeError do
       definition.get_classification_value(123)
@@ -410,7 +395,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_get_classification_value_invalid_arguments_point
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises TypeError do
       definition.get_classification_value(ORIGIN)
@@ -419,13 +404,12 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_get_classification_value_invalid_arguments_nil
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises TypeError do
       definition.get_classification_value(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::ComponentDefinition.remove_classification
@@ -433,7 +417,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_api_example
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    create_classified_test_instance()
+    create_classified_test_instance
     # API Example starts here:
     definition = Sketchup.active_model.definitions.first
     success = definition.remove_classification("IFC 2x3", "IfcDoor")
@@ -441,12 +425,12 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_success
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
-    if Sketchup.version.to_i < 15
+    definition = create_classified_test_instance.definition
+    result = if Sketchup.version.to_i < 15
       # SketchUp 2014 was a little bit different.
-      result = definition.remove_classification("IFC 2x3", "ifc:IfcDoor")
+      definition.remove_classification("IFC 2x3", "ifc:IfcDoor")
     else
-      result = definition.remove_classification("IFC 2x3", "IfcDoor")
+      definition.remove_classification("IFC 2x3", "IfcDoor")
     end
     assert(result)
     dictionary = definition.attribute_dictionary("IFC 2x3", false)
@@ -455,7 +439,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_success_only_schema_name
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
     result = definition.remove_classification("IFC 2x3")
     assert(result)
     dictionary = definition.attribute_dictionary("IFC 2x3", false)
@@ -464,7 +448,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_failure
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
     result = definition.remove_classification("FooBar", "IfcDoor")
     assert_equal(false, result)
     dictionaries = definition.attribute_dictionaries
@@ -474,7 +458,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_failure_image_definition
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    create_test_image()
+    create_test_image
     definition = Sketchup.active_model.definitions.first
     assert(definition.image?, "Failed to set up test.")
     result = definition.remove_classification("FooBar", "IfcDoor")
@@ -483,7 +467,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_incorrect_number_of_arguments_zero
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises ArgumentError do
       definition.remove_classification
     end
@@ -491,7 +475,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_incorrect_number_of_arguments_thee
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises ArgumentError do
       definition.remove_classification("IFC 2x3", "IfcDoor", "BogusArgument")
     end
@@ -499,7 +483,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_invalid_first_argument_nil
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.remove_classification(nil, "IfcDoor")
     end
@@ -507,7 +491,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_invalid_second_argument_nil
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.remove_classification("IFC 2x3", nil)
     end
@@ -515,7 +499,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_invalid_first_argument_number
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.remove_classification(3.14, "IfcDoor")
     end
@@ -523,7 +507,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_invalid_second_argument_number
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.remove_classification("IFC 2x3", 3.14)
     end
@@ -531,7 +515,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_invalid_first_argument_point
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.remove_classification(ORIGIN, "IfcDoor")
     end
@@ -539,12 +523,11 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_remove_classification_invalid_second_argument_point
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
     assert_raises TypeError do
       definition.remove_classification("IFC 2x3", ORIGIN)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::ComponentDefinition.set_classification_value
@@ -552,7 +535,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_api_example
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    create_test_instance()
+    create_test_instance
     # API Example starts here:
     definition = Sketchup.active_model.definitions.first
     definition.add_classification("IFC 2x3", "IfcDoor")
@@ -563,7 +546,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_string
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     path = ["IFC 2x3", "IfcDoor", "ObjectType", "IfcLabel"]
     result = definition.set_classification_value(path, "Room 101")
@@ -574,7 +557,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_invalid_key
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     path = ["ClassifierPathToHeaven"]
     result = definition.set_classification_value(path, "Room 101")
@@ -583,7 +566,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_not_classified
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_test_instance().definition
+    definition = create_test_instance.definition
 
     path = ["IFC 2x3", "IfcDoor", "ObjectType", "IfcLabel"]
     result = definition.set_classification_value(path, "Room 101")
@@ -592,7 +575,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_image_definition
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    create_test_image()
+    create_test_image
     definition = Sketchup.active_model.definitions.first
     assert(definition.image?, "Failed to set up test.")
 
@@ -605,7 +588,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_invalid_value
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
     path = ["IFC 2x3", "IfcDoor", "ObjectType", "IfcLabel"]
 
     assert_raises TypeError do
@@ -615,7 +598,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_corrupt_attribute_data
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
     path = ["IFC 2x3", "IfcDoor", "ObjectType", "IfcLabel"]
     corrupt_attribute_data(definition, path, 123, "attribute_type")
 
@@ -626,7 +609,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_valid_choice_value
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
     path = ["IFC 2x3", "IfcDoor", "OverallHeight", "instanceAttributes", "pos"]
 
     assert_raises NotImplementedError do
@@ -636,16 +619,16 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_incorrect_number_of_arguments_zero
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises ArgumentError do
-      definition.set_classification_value()
+      definition.set_classification_value
     end
   end
 
   def test_set_classification_value_incorrect_number_of_arguments_three
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
     path = ["IFC 2x3", "IfcDoor", "ObjectType", "IfcLabel"]
 
     assert_raises ArgumentError do
@@ -655,7 +638,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_invalid_path_argument_string
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises TypeError do
       definition.set_classification_value("IFC 2x3", "Room 101")
@@ -664,7 +647,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_invalid_path_argument_number
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises TypeError do
       definition.set_classification_value(123, "Room 101")
@@ -673,7 +656,7 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_invalid_path_argument_point
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises TypeError do
       definition.set_classification_value(ORIGIN, "Room 101")
@@ -682,12 +665,10 @@ class TC_Sketchup_ComponentDefinition < TestUp::TestCase
 
   def test_set_classification_value_invalid_path_argument_nil
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    definition = create_classified_test_instance().definition
+    definition = create_classified_test_instance.definition
 
     assert_raises TypeError do
       definition.set_classification_value(nil, "Room 101")
     end
   end
-
-
 end # class

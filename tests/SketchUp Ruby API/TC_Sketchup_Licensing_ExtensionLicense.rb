@@ -2,7 +2,7 @@
 # License:: All Rights Reserved.
 # Original Author:: Bugra Barin
 
-require 'testup/testcase'
+require "testup/testcase"
 
 # class Sketchup::Licensing::ExtensionLicense
 # http://www.sketchup.com/intl/developer/docs/ourdoc/extensionlicense
@@ -10,7 +10,6 @@ require 'testup/testcase'
 # Licensing tests are not repeatable unless we find a way to mock the licensing
 # internals. So, just doing API example and parameter tests.
 class TC_Sketchup_Licensing_ExtensionLicense < TestUp::TestCase
-
   def setup
     ext_id = "4e215280-dd23-40c4-babb-b8a8dd29d5ee"
     @ext_lic = Sketchup::Licensing.get_extension_license(ext_id)
@@ -20,7 +19,7 @@ class TC_Sketchup_Licensing_ExtensionLicense < TestUp::TestCase
     # ...
   end
 
-# ========================================================================== #
+  # ========================================================================== #
   # method Sketchup::Licensing::ExtensionLicense.licensed?
   # http://www.sketchup.com/intl/developer/docs/ourdoc/extensionlicense#licensed?
 
@@ -29,7 +28,7 @@ class TC_Sketchup_Licensing_ExtensionLicense < TestUp::TestCase
     ext_id = "4e215280-dd23-40c4-babb-b8a8dd29d5ee"
     ext_lic = Sketchup::Licensing.get_extension_license(ext_id)
     if ext_lic.licensed?
-       puts "Extension is licensed."
+      puts "Extension is licensed."
     end
   end
 
@@ -40,7 +39,7 @@ class TC_Sketchup_Licensing_ExtensionLicense < TestUp::TestCase
     end
   end
 
-# ========================================================================== #
+  # ========================================================================== #
   # method Sketchup::Licensing::ExtensionLicense.state
   # http://www.sketchup.com/intl/developer/docs/ourdoc/extensionlicense#state
 
@@ -49,7 +48,7 @@ class TC_Sketchup_Licensing_ExtensionLicense < TestUp::TestCase
     ext_id = "4e215280-dd23-40c4-babb-b8a8dd29d5ee"
     ext_lic = Sketchup::Licensing.get_extension_license(ext_id)
     if ext_lic.state == Sketchup::Licensing::TRIAL_EXPIRED
-       puts "Trial period has expired."
+      puts "Trial period has expired."
     end
   end
 
@@ -60,7 +59,7 @@ class TC_Sketchup_Licensing_ExtensionLicense < TestUp::TestCase
     end
   end
 
-# ========================================================================== #
+  # ========================================================================== #
   # method Sketchup::Licensing::ExtensionLicense.days_remaining
   # http://www.sketchup.com/intl/developer/docs/ourdoc/extensionlicense#days_remaining
 
@@ -69,7 +68,7 @@ class TC_Sketchup_Licensing_ExtensionLicense < TestUp::TestCase
     ext_id = "4e215280-dd23-40c4-babb-b8a8dd29d5ee"
     ext_lic = Sketchup::Licensing.get_extension_license(ext_id)
     if ext_lic.days_remaining != 0
-       puts "The license will expire in #{ext_lic.days_remaining} days."
+      puts "The license will expire in #{ext_lic.days_remaining} days."
     end
     # Just repeating this so that it always gets tested
     puts "The license will expire in #{ext_lic.days_remaining} days."
@@ -82,7 +81,7 @@ class TC_Sketchup_Licensing_ExtensionLicense < TestUp::TestCase
     end
   end
 
-# ========================================================================== #
+  # ========================================================================== #
   # method Sketchup::Licensing::ExtensionLicense.error_description
   # http://www.sketchup.com/intl/developer/docs/ourdoc/extensionlicense#error_description
 
@@ -90,8 +89,8 @@ class TC_Sketchup_Licensing_ExtensionLicense < TestUp::TestCase
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     ext_id = "4e215280-dd23-40c4-babb-b8a8dd29d5ee"
     ext_lic = Sketchup::Licensing.get_extension_license(ext_id)
-    if !ext_lic.licensed?
-       puts ext_lic.error_description
+    unless ext_lic.licensed?
+      puts ext_lic.error_description
     end
   end
 
@@ -101,5 +100,4 @@ class TC_Sketchup_Licensing_ExtensionLicense < TestUp::TestCase
       @ext_lic.error_description("")
     end
   end
-
 end # class

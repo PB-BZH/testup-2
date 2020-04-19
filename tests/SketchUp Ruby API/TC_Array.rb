@@ -7,7 +7,6 @@ require "testup/testcase"
 # class Array
 # http://www.sketchup.com/intl/developer/docs/ourdoc/array
 class TC_Array < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -232,7 +231,7 @@ class TC_Array < TestUp::TestCase
 
   def test_distance_to_line_x_to_y
     array = [1, 0, 0]
-    line = [Geom::Point3d.new(0,-1,0), Geom::Vector3d.new(0, 1, 0)]
+    line = [Geom::Point3d.new(0, -1, 0), Geom::Vector3d.new(0, 1, 0)]
     distance = array.distance_to_line(line)
     assert_equal(1, distance)
     assert_kind_of(Length, distance)
@@ -247,13 +246,12 @@ class TC_Array < TestUp::TestCase
   end
 
   def test_distance_to_line_zero_distance
-    array = [2,2,2]
-    line = [Geom::Point3d.new(0, 0, 0), Geom::Vector3d.new(2,2,2)]
+    array = [2, 2, 2]
+    line = [Geom::Point3d.new(0, 0, 0), Geom::Vector3d.new(2, 2, 2)]
     distance = array.distance_to_line(line)
     assert_equal(0, distance)
     assert_kind_of(Length, distance)
   end
-
 
   # ========================================================================== #
   # method Array.distance_to_plane
@@ -367,7 +365,7 @@ class TC_Array < TestUp::TestCase
     array1 = [2, 3, 4]
     array2 = [1, 2, 3]
     dot_product = array1.dot(array2)
-    expected = ArrayUtils::dot_product(array1, array2)
+    expected = ArrayUtils.dot_product(array1, array2)
     assert_in_delta(expected, dot_product, SKETCHUP_FLOAT_TOLERANCE)
   end
 
@@ -375,7 +373,7 @@ class TC_Array < TestUp::TestCase
     array1 = [1, 0, 0]
     array2 = [0, 1, 0]
     dot_product = array1.dot(array2)
-    expected = ArrayUtils::dot_product(array1, array2)
+    expected = ArrayUtils.dot_product(array1, array2)
     assert_in_delta(expected, dot_product, SKETCHUP_FLOAT_TOLERANCE)
   end
 
@@ -384,7 +382,7 @@ class TC_Array < TestUp::TestCase
     array2 = [1, 2, 3]
     vector2 = Geom::Vector3d.new(array2[0], array2[1], array2[2])
     dot_product = array1.dot(vector2)
-    expected = ArrayUtils::dot_product(array1, array2)
+    expected = ArrayUtils.dot_product(array1, array2)
     assert_in_delta(expected, dot_product, SKETCHUP_FLOAT_TOLERANCE)
   end
 
@@ -908,7 +906,7 @@ class TC_Array < TestUp::TestCase
 
   def test_transform_identity
     array = [1, 2, 3]
-    transform = Geom::Transformation.new()
+    transform = Geom::Transformation.new
     expected = Geom::Point3d.new(array.x, array.y, array.z)
     array2 = array.transform(transform)
     assert_equal(expected, array2)

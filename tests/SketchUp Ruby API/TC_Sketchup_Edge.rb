@@ -2,22 +2,18 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Sketchup::Edge
 # http://www.sketchup.com/intl/en/developer/docs/ourdoc/edge
 class TC_Sketchup_Edge < TestUp::TestCase
-
   def setup
-    start_with_empty_model()
+    start_with_empty_model
   end
 
   def teardown
     # ...
   end
-
 
   # ========================================================================== #
   # Local test utilities.
@@ -26,13 +22,12 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def create_test_edge_shared_by_two_faces
     entities = Sketchup.active_model.active_entities
-    face = entities.add_face([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    face = entities.add_face([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     face.reverse!
     edge = face.edges.first
     face.pushpull(100, true)
     edge
   end
-
 
   # ========================================================================== #
   # method Sketchup::Edge.all_connected
@@ -40,7 +35,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_all_connected_api_example
     entities = Sketchup.active_model.active_entities
-    face = entities.add_face([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    face = entities.add_face([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     edge = face.edges.first
     face.pushpull(100, true)
     # Returns an array of all the entities that makes up the cube, 6 faces and
@@ -49,7 +44,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_all_connected
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     entities = edge.all_connected
     assert_kind_of(Array, entities)
@@ -79,13 +74,12 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_all_connected_incorrect_number_of_arguments
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     assert_raises(ArgumentError) do
       edge.all_connected(1)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Edge.common_face
@@ -93,14 +87,14 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_common_face_api_example
     entities = Sketchup.active_model.active_entities
-    face = entities.add_face([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    face = entities.add_face([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     edge1, edge2, edge3, edge4 = face.edges
     # Returns the face shared by both edges.
     edge1.common_face(edge2)
   end
 
   def test_common_face_edges_has_common_face
-    edge1 = create_test_edge_shared_by_two_faces()
+    edge1 = create_test_edge_shared_by_two_faces
     face = edge1.faces.first
     edge2 = face.edges.find { |edge| edge != edge1 }
 
@@ -131,15 +125,15 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_common_face_incorrect_number_of_arguments_zero
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     assert_raises(ArgumentError) do
-      edge.common_face()
+      edge.common_face
     end
   end
 
   def test_common_face_incorrect_number_of_arguments_two
-    edge1 = create_test_edge_shared_by_two_faces()
+    edge1 = create_test_edge_shared_by_two_faces
     edge2 = edge1.faces.first.edges.first
 
     assert_raises(ArgumentError) do
@@ -148,7 +142,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_common_face_invalid_argument_nil
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     assert_raises(TypeError) do
       edge.common_face(nil)
@@ -156,7 +150,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_common_face_invalid_argument_string
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     assert_raises(TypeError) do
       edge.common_face("This is not an edge")
@@ -164,13 +158,12 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_common_face_invalid_argument_number
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     assert_raises(TypeError) do
       edge.common_face(10010101011)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Edge.curve
@@ -178,14 +171,14 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_curve_api_example
     entities = Sketchup.active_model.active_entities
-    edges = entities.add_curve([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    edges = entities.add_curve([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     # Returns a Sketchup::Curve entity.
     edges[0].curve
   end
 
   def test_curve_edges_has_curve
     entities = Sketchup.active_model.active_entities
-    edges = entities.add_curve([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    edges = entities.add_curve([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     edge = edges.first
 
     result = edge.curve
@@ -203,7 +196,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_curve_edges_has_arc_curve
     entities = Sketchup.active_model.active_entities
-    edges = entities.add_arc([0,0,0], X_AXIS, Z_AXIS, 1.m, 0, 90.degrees)
+    edges = entities.add_arc([0, 0, 0], X_AXIS, Z_AXIS, 1.m, 0, 90.degrees)
     edge = edges.first
 
     result = edge.curve
@@ -221,7 +214,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_curve_edges_has_no_curve
     entities = Sketchup.active_model.active_entities
-    edges = entities.add_edges([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    edges = entities.add_edges([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     edge = edges.first
 
     result = edge.curve
@@ -233,13 +226,12 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_curve_incorrect_number_of_arguments
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     assert_raises(ArgumentError) do
       edge.curve(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Edge.end
@@ -247,14 +239,14 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_end_api_example
     entities = Sketchup.active_model.active_entities
-    edge = entities.add_line([0,0,0], [100,0,0])
+    edge = entities.add_line([0, 0, 0], [100, 0, 0])
     # Returns a point Point3d(0.0, 0.0, 100.0).
     edge.end
   end
 
   def test_end
     entities = Sketchup.active_model.active_entities
-    edge = entities.add_line([0,0,0], [100,0,0])
+    edge = entities.add_line([0, 0, 0], [100, 0, 0])
 
     result = edge.end
     assert_kind_of(Sketchup::Vertex, result)
@@ -277,13 +269,12 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_end_incorrect_number_of_arguments
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     assert_raises(ArgumentError) do
       edge.curve(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Edge.explode_curve
@@ -291,13 +282,13 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_explode_curve_api_example
     entities = Sketchup.active_model.active_entities
-    edges = entities.add_curve([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    edges = entities.add_curve([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     edges[0].explode_curve
   end
 
   def test_explode_curve_edges_has_curve
     entities = Sketchup.active_model.active_entities
-    edges = entities.add_curve([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    edges = entities.add_curve([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     edge = edges.first
     curve = edge.curve
 
@@ -309,7 +300,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_explode_curve_edges_has_arc_curve
     entities = Sketchup.active_model.active_entities
-    edges = entities.add_arc([0,0,0], X_AXIS, Z_AXIS, 1.m, 0, 90.degrees)
+    edges = entities.add_arc([0, 0, 0], X_AXIS, Z_AXIS, 1.m, 0, 90.degrees)
     edge = edges.first
     curve = edge.curve
 
@@ -321,7 +312,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_explode_curve_edges_has_no_curve
     entities = Sketchup.active_model.active_entities
-    edges = entities.add_edges([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    edges = entities.add_edges([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     edge = edges.first
 
     result = edge.explode_curve
@@ -333,13 +324,12 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_explode_curve_incorrect_number_of_arguments
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     assert_raises(ArgumentError) do
       edge.explode_curve(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Edge.faces
@@ -347,7 +337,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_faces_api_example
     entities = Sketchup.active_model.active_entities
-    face = entities.add_face([0,0,0], [100,0,0], [100,100,0], [0,100,0])
+    face = entities.add_face([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     edge = face.edges.first
     face.pushpull(100, true)
 
@@ -356,7 +346,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_faces
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     assert_kind_of(Array, edge.faces)
 
@@ -380,13 +370,12 @@ class TC_Sketchup_Edge < TestUp::TestCase
   end
 
   def test_faces_incorrect_number_of_arguments
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
 
     assert_raises(ArgumentError) do
       edge.faces(1)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Edge.find_faces
@@ -394,24 +383,24 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_find_faces_api_example
     entities = Sketchup.active_model.active_entities
-    edge1 = entities.add_line([0,0,0], [100,0,0])
-    edge2 = entities.add_line([100,0,0], [100,100,0])
-    edge3 = entities.add_line([100,100,0], [0,0,0])
+    edge1 = entities.add_line([0, 0, 0], [100, 0, 0])
+    edge2 = entities.add_line([100, 0, 0], [100, 100, 0])
+    edge3 = entities.add_line([100, 100, 0], [0, 0, 0])
     edge1.find_faces
   end
 
   def test_find_faces_triangle
     entities = Sketchup.active_model.active_entities
-    edge1 = entities.add_line([0,0,0], [100,0,0])
-    edge2 = entities.add_line([100,0,0], [100,100,0])
-    edge3 = entities.add_line([100,100,0], [0,0,0])
+    edge1 = entities.add_line([0, 0, 0], [100, 0, 0])
+    edge2 = entities.add_line([100, 0, 0], [100, 100, 0])
+    edge3 = entities.add_line([100, 100, 0], [0, 0, 0])
 
     result = edge1.find_faces
     assert_equal(1, result)
   end
 
   def test_find_faces_find_multiple_faces
-    edge = create_test_edge_shared_by_two_faces()
+    edge = create_test_edge_shared_by_two_faces
     entities = Sketchup.active_model.active_entities
     faces = entities.grep(Sketchup::Face)
     entities.erase_entities(faces)
@@ -425,7 +414,7 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_find_faces_lonely_edge
     entities = Sketchup.active_model.active_entities
-    edge = entities.add_line([0,0,0], [100,0,0])
+    edge = entities.add_line([0, 0, 0], [100, 0, 0])
 
     result = edge.find_faces
     assert_equal(0, result)
@@ -437,12 +426,10 @@ class TC_Sketchup_Edge < TestUp::TestCase
 
   def test_find_faces_incorrect_number_of_arguments
     entities = Sketchup.active_model.active_entities
-    edge = entities.add_line([0,0,0], [100,0,0])
+    edge = entities.add_line([0, 0, 0], [100, 0, 0])
 
     assert_raises(ArgumentError) do
       edge.find_faces(nil)
     end
   end
-
-
 end # class

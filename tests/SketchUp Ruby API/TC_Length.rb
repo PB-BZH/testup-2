@@ -2,14 +2,11 @@
 # License:: All Rights Reserved.
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Length
 # http://www.sketchup.com/intl/developer/docs/ourdoc/length
 class TC_Length < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -18,13 +15,11 @@ class TC_Length < TestUp::TestCase
     # ...
   end
 
-
   # http://stackoverflow.com/a/736313/486990
-  FIXNUM_MAX = (2**(0.size * 8 -2) -1)
-  FIXNUM_MIN = -(2**(0.size * 8 -2))
+  FIXNUM_MAX = (2**(0.size * 8 - 2) - 1)
+  FIXNUM_MIN = -(2**(0.size * 8 - 2))
 
   BIGNUM = (FIXNUM_MAX * 2) + 10
-
 
   # ========================================================================== #
   # class Math
@@ -34,7 +29,6 @@ class TC_Length < TestUp::TestCase
   def test_Math_sqrt_with_Length
     assert_equal(3.0, Math.sqrt(9.to_l))
   end
-
 
   # ========================================================================== #
   # module Marshal
@@ -48,7 +42,6 @@ class TC_Length < TestUp::TestCase
     # would be restored as Float, which should be considered a bug.
     # We just test that the restored data is equal to the dumped data.
   end
-
 
   # ========================================================================== #
   # Interoperability Operator Plus
@@ -82,7 +75,6 @@ class TC_Length < TestUp::TestCase
   def test_Float_plus_Length
     assert_equal(12.0, 2.0 + 10.to_l)
   end
-
 
   # ========================================================================== #
   # Interoperability Operator Minus
@@ -117,7 +109,6 @@ class TC_Length < TestUp::TestCase
     assert_equal(-8.0, 2.0 - 10.to_l)
   end
 
-
   # ========================================================================== #
   # Interoperability Operator Multiply
 
@@ -150,7 +141,6 @@ class TC_Length < TestUp::TestCase
   def test_Float_multiply_Length
     assert_equal(20.0, 2.0 * 10.to_l)
   end
-
 
   # ========================================================================== #
   # Interoperability Operator Plus
@@ -185,7 +175,6 @@ class TC_Length < TestUp::TestCase
     assert_equal(12.0, 2.0 + 10.to_l)
   end
 
-
   # ========================================================================== #
   # Interoperability Operator Modulo
 
@@ -205,26 +194,24 @@ class TC_Length < TestUp::TestCase
     assert_equal(2.5, 5.5 % 3.to_l)
   end
 
-
   # ========================================================================== #
   # Interoperability Operator Pow
 
   def test_Length_pow_Fixnum
-    assert_equal(25.0, 5.0.to_l ** 2)
+    assert_equal(25.0, 5.0.to_l**2)
   end
 
   def test_Length_pow_Float
-    assert_equal(25.0, 5.0.to_l ** 2.0)
+    assert_equal(25.0, 5.0.to_l**2.0)
   end
 
   def test_Fixnum_pow_Length
-    assert_equal(25.0, 5 ** 2.to_l)
+    assert_equal(25.0, 5**2.to_l)
   end
 
   def test_Float_pow_Length
-    assert_equal(25.0, 5.0 ** 2.to_l)
+    assert_equal(25.0, 5.0**2.to_l)
   end
-
 
   # ========================================================================== #
   # method Length.==
@@ -329,7 +316,6 @@ class TC_Length < TestUp::TestCase
       result = length1 == length2
     end
   end
-
 
   # ========================================================================== #
   # method Length.>
@@ -439,7 +425,6 @@ class TC_Length < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Length.>=
   # http://www.sketchup.com/intl/developer/docs/ourdoc/length#>=
@@ -547,7 +532,6 @@ class TC_Length < TestUp::TestCase
       result = length1 >= length2
     end
   end
-
 
   # ========================================================================== #
   # method Length.<
@@ -657,7 +641,6 @@ class TC_Length < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Length.<=
   # http://www.sketchup.com/intl/developer/docs/ourdoc/length#<=
@@ -766,7 +749,6 @@ class TC_Length < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Length.<=>
   # http://www.sketchup.com/intl/developer/docs/ourdoc/length#<=>
@@ -865,7 +847,6 @@ class TC_Length < TestUp::TestCase
     assert_nil(length1 <=> length2)
   end
 
-
   # ========================================================================== #
   # method Length.inspect
   # http://www.sketchup.com/intl/developer/docs/ourdoc/length#inspect
@@ -881,7 +862,6 @@ class TC_Length < TestUp::TestCase
     assert_kind_of(String, result)
     assert_equal(55.0.to_s, result)
   end
-
 
   # ========================================================================== #
   # method Length.to_s
@@ -900,7 +880,6 @@ class TC_Length < TestUp::TestCase
     assert_equal(expected, result)
   end
 
-
   # ========================================================================== #
   # method Length.to_f
   # http://www.sketchup.com/intl/developer/docs/ourdoc/length#to_f
@@ -916,7 +895,6 @@ class TC_Length < TestUp::TestCase
     assert_kind_of(Float, result)
     assert_equal(55.0, result)
   end
-
 
   # ========================================================================== #
   # method Length.is_a?
@@ -935,7 +913,6 @@ class TC_Length < TestUp::TestCase
     assert_kind_of(Comparable, 10.to_l)
   end
 
-
   # ========================================================================== #
   # method Length.kind_of?
 
@@ -951,14 +928,12 @@ class TC_Length < TestUp::TestCase
     assert_kind_of(Comparable, 10.to_l)
   end
 
-
   # ========================================================================== #
   # method Length.frozen?
 
   def test_frozen_Query
     assert(10.to_l.frozen?)
   end
-
 
   # ========================================================================== #
   # method Length.freeze
@@ -968,14 +943,12 @@ class TC_Length < TestUp::TestCase
     assert_equal(length, length.freeze)
   end
 
-
   # ========================================================================== #
   # method Length.tainted?
 
   def test_tainted_Query
     assert_equal(false, 10.to_l.tainted?)
   end
-
 
   # ========================================================================== #
   # method Length.taint
@@ -986,14 +959,12 @@ class TC_Length < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Length.untrusted?
 
   def test_untrusted_Query
     assert_equal(false, 10.to_l.untrusted?)
   end
-
 
   # ========================================================================== #
   # method Length.untrust
@@ -1004,7 +975,6 @@ class TC_Length < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Length.trust
 
@@ -1012,7 +982,6 @@ class TC_Length < TestUp::TestCase
     length = 10.to_l
     assert_equal(length, length.trust)
   end
-
 
   # ========================================================================== #
   # method Length.hash
@@ -1023,7 +992,6 @@ class TC_Length < TestUp::TestCase
     assert_equal(length1.hash, length2.hash)
   end
 
-
   # ========================================================================== #
   # method Length.dup
 
@@ -1032,7 +1000,6 @@ class TC_Length < TestUp::TestCase
       10.to_l.dup
     end
   end
-
 
   # ========================================================================== #
   # method Length.clone
@@ -1043,14 +1010,12 @@ class TC_Length < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Length.!
 
   def test_test_Operator_Not
     assert_equal(false, !10.to_l)
   end
-
 
   # ========================================================================== #
   # method Length.===
@@ -1152,6 +1117,4 @@ class TC_Length < TestUp::TestCase
     result = length1 === length2
     assert_equal(false, result)
   end
-
-
 end # class

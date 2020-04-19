@@ -2,21 +2,17 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
-require 'testup/testcase'
-
+require "testup/testcase"
 
 # Set of tests triggering different result types.
 class TC_TestReadOnlyDialog < TestUp::TestCase
-
   def setup
-    disable_read_only_flag_for_test_models()
+    disable_read_only_flag_for_test_models
   end
 
   def teardown
-    restore_read_only_flag_for_test_models()
+    restore_read_only_flag_for_test_models
   end
-
 
   # ========================================================================== #
 
@@ -26,6 +22,4 @@ class TC_TestReadOnlyDialog < TestUp::TestCase
     Sketchup.open_file(test_model)
     Sketchup.active_model.close(true)
   end # test
-
-
 end # class

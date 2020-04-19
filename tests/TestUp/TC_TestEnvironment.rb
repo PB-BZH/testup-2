@@ -2,13 +2,10 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
-require 'testup/testcase'
-
+require "testup/testcase"
 
 # Set of tests triggering different result types.
 class TC_TestEnvironment < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -16,7 +13,6 @@ class TC_TestEnvironment < TestUp::TestCase
   def teardown
     # ...
   end
-
 
   # ========================================================================== #
 
@@ -29,8 +25,6 @@ class TC_TestEnvironment < TestUp::TestCase
   end # test
 
   def test_skipped
-    skip('This is not the test you are looking for...')
+    skip("This is not the test you are looking for...")
   end # test
-
-
 end # class

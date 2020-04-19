@@ -1,45 +1,41 @@
 module SKUI
-
-  require File.join( PATH, 'control.rb' )
-
+  require File.join(PATH, "control.rb")
 
   # @since 1.0.0
   class Label < Control
-
     # @return [Control]
     # @since 1.0.0
-    prop( :align, &TypeCheck::TEXTALIGN )
+    prop(:align, &TypeCheck::TEXTALIGN)
 
     # @return [String]
     # @since 1.0.0
-    prop( :caption, &TypeCheck::STRING )
+    prop(:caption, &TypeCheck::STRING)
 
     # @return [Control]
     # @since 1.0.0
-    prop( :control, &TypeCheck::CONTROL )
+    prop(:control, &TypeCheck::CONTROL)
 
     # @return [String]
     # @since 1.0.0
-    prop( :url, &TypeCheck::STRING )
+    prop(:url, &TypeCheck::STRING)
 
     # @since 1.0.0
-    define_event( :open_url )
-    
+    define_event(:open_url)
+
     # @param [String] caption
     # @param [Control] control Control which focus of forwarded to.
     #
     # @since 1.0.0
-    def initialize( caption, control = nil )
+    def initialize(caption, control = nil)
       super()
 
-      @properties[ :align ]   = :left
-      @properties[ :caption ] = caption
-      @properties[ :control ] = control
+      @properties[:align] = :left
+      @properties[:caption] = caption
+      @properties[:control] = control
 
-      add_event_handler( :open_url ) { |param|
-        UI.openURL( param )
+      add_event_handler(:open_url) { |param|
+        UI.openURL(param)
       }
     end
-
   end # class
 end # module

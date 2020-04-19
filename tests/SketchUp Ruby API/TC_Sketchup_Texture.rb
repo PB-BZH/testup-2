@@ -2,16 +2,13 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
 
-require 'fileutils'
-
+require "fileutils"
 
 # class Sketchup::Texture
 # http://www.sketchup.com/intl/developer/docs/ourdoc/texture
 class TC_Sketchup_Texture < TestUp::TestCase
-
   def setup
     start_with_empty_model
   end
@@ -34,14 +31,14 @@ class TC_Sketchup_Texture < TestUp::TestCase
 
   # @return [String]
   def load_small_texture
-    load_test_material('test_small.jpg').texture
+    load_test_material("test_small.jpg").texture
   end
 
   # For testing larger textures to ensure the written textures are not resized.
   #
   # @return [String]
   def load_large_texture
-    load_test_material('test_large.jpg').texture
+    load_test_material("test_large.jpg").texture
   end
 
   # @param [Sketchup::Texture] texture
@@ -72,13 +69,12 @@ class TC_Sketchup_Texture < TestUp::TestCase
     material
   end
 
-
   # ========================================================================== #
   # method Sketchup::Texture.write
   # http://www.sketchup.com/intl/developer/docs/ourdoc/texture#write
 
   def test_write_api_example
-    skip('Implemented in SU2016') if Sketchup.version.to_i < 16
+    skip("Implemented in SU2016") if Sketchup.version.to_i < 16
     load_small_texture
 
     material = Sketchup.active_model.materials[0]
@@ -88,12 +84,12 @@ class TC_Sketchup_Texture < TestUp::TestCase
   end
 
   def test_write_original
-    skip('Implemented in SU2016') if Sketchup.version.to_i < 16
+    skip("Implemented in SU2016") if Sketchup.version.to_i < 16
     texture = load_large_texture
     temp_file = get_temp_filename(texture)
 
     result = texture.write(temp_file)
-    assert(result, 'Failed to write texture')
+    assert(result, "Failed to write texture")
 
     verify_textures_are_equal(texture, temp_file)
   ensure
@@ -101,12 +97,12 @@ class TC_Sketchup_Texture < TestUp::TestCase
   end
 
   def test_write_original_convert_image_type
-    skip('Implemented in SU2016') if Sketchup.version.to_i < 16
+    skip("Implemented in SU2016") if Sketchup.version.to_i < 16
     texture = load_large_texture
-    temp_file = get_temp_filename(texture, '.png')
+    temp_file = get_temp_filename(texture, ".png")
 
     result = texture.write(temp_file)
-    assert(result, 'Failed to write texture')
+    assert(result, "Failed to write texture")
 
     verify_textures_are_equal(texture, temp_file)
   ensure
@@ -114,7 +110,7 @@ class TC_Sketchup_Texture < TestUp::TestCase
   end
 
   def test_write_colorized
-    skip('Implemented in SU2016') if Sketchup.version.to_i < 16
+    skip("Implemented in SU2016") if Sketchup.version.to_i < 16
     texture = load_large_texture
     temp_file = get_temp_filename(texture)
 
@@ -123,13 +119,13 @@ class TC_Sketchup_Texture < TestUp::TestCase
     material.color = Sketchup::Color.new(128, 0, 0)
 
     result = texture.write(temp_file, true)
-    assert(result, 'Failed to write texture')
+    assert(result, "Failed to write texture")
 
     material = verify_textures_are_equal(texture, temp_file)
 
     # A naive check to make sure the exported texture was colorized.
     assert(material.color != original_color,
-      'Exported material was not colorized.')
+      "Exported material was not colorized.")
 
     # Just a simple check to catch if the export result changes.
     assert_equal([98, 28, 28, 255], material.color.to_a)
@@ -138,15 +134,15 @@ class TC_Sketchup_Texture < TestUp::TestCase
   end
 
   def test_write_colorized_convert_image_type
-    skip('Implemented in SU2016') if Sketchup.version.to_i < 16
+    skip("Implemented in SU2016") if Sketchup.version.to_i < 16
     texture = load_large_texture
-    temp_file = get_temp_filename(texture, '.png')
+    temp_file = get_temp_filename(texture, ".png")
 
     material = texture.parent
     material.color = Sketchup::Color.new(128, 0, 0)
 
     result = texture.write(temp_file)
-    assert(result, 'Failed to write texture')
+    assert(result, "Failed to write texture")
 
     verify_textures_are_equal(texture, temp_file)
   ensure
@@ -154,7 +150,7 @@ class TC_Sketchup_Texture < TestUp::TestCase
   end
 
   def test_write_incorrect_number_of_arguments_zero
-    skip('Implemented in SU2016') if Sketchup.version.to_i < 16
+    skip("Implemented in SU2016") if Sketchup.version.to_i < 16
     texture = load_small_texture
     temp_file = get_temp_filename(texture)
 
@@ -166,7 +162,7 @@ class TC_Sketchup_Texture < TestUp::TestCase
   end
 
   def test_write_incorrect_number_of_arguments_three
-    skip('Implemented in SU2016') if Sketchup.version.to_i < 16
+    skip("Implemented in SU2016") if Sketchup.version.to_i < 16
     texture = load_small_texture
     temp_file = get_temp_filename(texture)
 
@@ -178,7 +174,7 @@ class TC_Sketchup_Texture < TestUp::TestCase
   end
 
   def test_write_invalid_argument_nil
-    skip('Implemented in SU2016') if Sketchup.version.to_i < 16
+    skip("Implemented in SU2016") if Sketchup.version.to_i < 16
     texture = load_small_texture
     temp_file = get_temp_filename(texture)
 
@@ -190,7 +186,7 @@ class TC_Sketchup_Texture < TestUp::TestCase
   end
 
   def test_write_invalid_argument_number
-    skip('Implemented in SU2016') if Sketchup.version.to_i < 16
+    skip("Implemented in SU2016") if Sketchup.version.to_i < 16
     texture = load_small_texture
     temp_file = get_temp_filename(texture)
 
@@ -200,5 +196,4 @@ class TC_Sketchup_Texture < TestUp::TestCase
   ensure
     File.delete(temp_file) if File.exist?(temp_file)
   end
-
 end # class

@@ -2,12 +2,9 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
 
-
 class TC_Sketchup_InstancePath < TestUp::TestCase
-
   def setup
     start_with_empty_model
     @path = create_test_instances
@@ -17,11 +14,10 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     # ...
   end
 
-
   # Model > ComponentInstance > Group1 > Group2 > Group3 > Edge
   def create_test_instances
     model = Sketchup.active_model
-    definition = model.definitions.add('TC_Sketchup_InstancePath')
+    definition = model.definitions.add("TC_Sketchup_InstancePath")
     group1 = definition.entities.add_group
     group2 = group1.entities.add_group
     group2.transform!([10, 20, 30])
@@ -44,10 +40,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
       entity.is_a?(Sketchup::Group) || entity.is_a?(Sketchup::ComponentInstance)
     }
     tr = Geom::Transformation.new
-    instances.each { |instance| tr = tr * instance.transformation }
+    instances.each { |instance| tr *= instance.transformation }
     tr
   end
-
 
   # ========================================================================== #
   # class Sketchup::InstancePath
@@ -56,7 +51,6 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     # TODO:
   end
-
 
   # ========================================================================== #
   # method Sketchup::InstancePath.initialize
@@ -111,10 +105,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.to_a
-  
+
   def test_to_a
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -150,10 +143,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.include?
-  
+
   def test_include_Query
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -187,10 +179,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.size
-  
+
   def test_size
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -214,10 +205,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.length
-  
+
   def test_length
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -241,10 +231,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.leaf
-  
+
   def test_leaf
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -274,10 +263,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.root
-  
+
   def test_root
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -307,10 +295,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.valid?
-  
+
   def test_valid_Query
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -338,10 +325,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.empty?
-  
+
   def test_empty_Query
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -371,16 +357,15 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.persistent_id_path
-  
+
   def test_persistent_id_path
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
     instance_path = Sketchup::InstancePath.new(path)
     result = instance_path.persistent_id_path
-    expected = path.map { |entity| entity.persistent_id }.join('.')
+    expected = path.map { |entity| entity.persistent_id }.join(".")
     assert_equal(expected, result)
   end
 
@@ -388,7 +373,7 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     instance_path = Sketchup::InstancePath.new([])
     result = instance_path.persistent_id_path
-    expected = ''
+    expected = ""
     assert_equal(expected, result)
   end
 
@@ -408,10 +393,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.transformation
-  
+
   def test_transformation
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -479,10 +463,9 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.==
-  
+
   def test_Operator_Equal
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -513,15 +496,14 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
   def test_Operator_Equal_compare_against_other_types
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     instance_path = Sketchup::InstancePath.new(@path)
-    refute(instance_path == nil)
+    refute(instance_path.nil?)
     refute(instance_path == 123)
-    refute(instance_path == 'hello')
+    refute(instance_path == "hello")
   end
-
 
   # ========================================================================== #
   # method Sketchup::InstancePath.[]
-  
+
   def test_Operator_Get
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -593,19 +575,18 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
     }
   end
 
-
   # ========================================================================== #
   # method Sketchup::InstancePath.each
-  
+
   def test_each
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
     instance_path = Sketchup::InstancePath.new(path)
     assert_kind_of(Enumerable, instance_path)
-    instance_path.each { |entity|
+    instance_path.each do |entity|
       assert_kind_of(Sketchup::Entity, entity)
       assert_includes(path, entity)
-    }
+    end
   end
 
   def test_each_deleted_entities
@@ -623,5 +604,4 @@ class TC_Sketchup_InstancePath < TestUp::TestCase
       instance_path.each(nil) {}
     }
   end
-
 end # class

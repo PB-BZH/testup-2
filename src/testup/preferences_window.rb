@@ -5,31 +5,29 @@
 #
 #-------------------------------------------------------------------------------
 
-
 module TestUp
   class PreferencesWindow < SKUI::Window
-
     def initialize
       options = {
-        :title           => "#{PLUGIN_NAME} - Preferences",
-        :preferences_key => "#{PLUGIN_ID}_Preferences",
-        :width           => 600,
-        :height          => 400,
-        :resizable       => false
+        title: "#{PLUGIN_NAME} - Preferences",
+        preferences_key: "#{PLUGIN_ID}_Preferences",
+        width: 600,
+        height: 400,
+        resizable: false
       }
       super(options)
-      init_controls()
+      init_controls
     end
 
     # TODO: Fix this in SKUI.
     # Hack, as SKUI currently doesn't support subclassing of it's controls.
     def typename
-      SKUI::Window.to_s.split('::').last
+      SKUI::Window.to_s.split("::").last
     end
 
     private
 
-    def init_controls()
+    def init_controls
       # Test Suite Paths
 
       paths = TestUp.settings[:paths_to_testsuites]
@@ -40,48 +38,48 @@ module TestUp
       lst_paths.position(5, 25)
       lst_paths.right = 5
       lst_paths.height = 150
-      self.add_control(lst_paths)
+      add_control(lst_paths)
 
-      lbl_paths = SKUI::Label.new('Test suite paths:', lst_paths)
+      lbl_paths = SKUI::Label.new("Test suite paths:", lst_paths)
       lbl_paths.position(5, 5)
-      self.add_control(lbl_paths)
+      add_control(lbl_paths)
 
-      btn_move_up = SKUI::Button.new('Up') { |control|
+      btn_move_up = SKUI::Button.new("Up") { |control|
         list = control.window[:paths]
-        list.move_selected_up()
+        list.move_selected_up
       }
       btn_move_up.position(5, 180)
-      self.add_control(btn_move_up)
+      add_control(btn_move_up)
 
-      btn_move_down = SKUI::Button.new('Down') { |control|
+      btn_move_down = SKUI::Button.new("Down") { |control|
         list = control.window[:paths]
-        list.move_selected_down()
+        list.move_selected_down
       }
       btn_move_down.position(85, 180)
-      self.add_control(btn_move_down)
+      add_control(btn_move_down)
 
       p4paths = Perforce.find_p4_paths
       if p4paths.is_a?(Array) && !p4paths.empty?
-        btn_p4 = SKUI::Button.new('P4 Clients') { |control|
+        btn_p4 = SKUI::Button.new("P4 Clients") { |control|
           @p4window = Perforce::P4Window.new
-          @p4window.on(:close) {
+          @p4window.on(:close) do
             paths = @p4window.result
             unless paths.nil?
               lst_paths.clear
               lst_paths.add_item(paths)
             end
-          }
+          end
           @p4window.show
         }
-        on(:close) {
-          @p4window.close if @p4window && @p4window.visible?
-        }
+        on(:close) do
+          @p4window.close if @p4window&.visible?
+        end
         btn_p4.position(-255, 180)
         btn_p4.tooltip = "Switch P4 client tests"
-        self.add_control(btn_p4)
+        add_control(btn_p4)
       end
 
-      btn_edit_path = SKUI::Button.new('Edit') { |control|
+      btn_edit_path = SKUI::Button.new("Edit") { |control|
         list = control.window[:paths]
         if list.value.nil?
           UI.beep
@@ -95,40 +93,40 @@ module TestUp
         end
       }
       btn_edit_path.position(-170, 180)
-      self.add_control(btn_edit_path)
+      add_control(btn_edit_path)
 
-      btn_remove_path = SKUI::Button.new('Remove') { |control|
+      btn_remove_path = SKUI::Button.new("Remove") { |control|
         list = control.window[:paths]
-        for item in list.value.dup
-          list.remove_item( item )
+        list.value.dup.each do |item|
+          list.remove_item(item)
         end
       }
       btn_remove_path.position(-85, 180)
-      self.add_control(btn_remove_path)
+      add_control(btn_remove_path)
 
-      btn_add_path = SKUI::Button.new('Add') { |control|
-        message = 'Select folder that includes the test cases.'
+      btn_add_path = SKUI::Button.new("Add") { |control|
+        message = "Select folder that includes the test cases."
         paths = SystemUI.select_directory(
           select_multiple: true,
           message: message
         )
         unless paths.nil?
           list = control.window[:paths]
-          paths.each { |path|
+          paths.each do |path|
             list.add_item(path)
-          }
+          end
         end
       }
       btn_add_path.position(-5, 180)
-      self.add_control(btn_add_path)
+      add_control(btn_add_path)
 
       # Code Editor
 
-      grp_editor = SKUI::Groupbox.new('Code Editor')
+      grp_editor = SKUI::Groupbox.new("Code Editor")
       grp_editor.position(5, 220)
       grp_editor.right = 5
       grp_editor.height = 130
-      self.add_control(grp_editor)
+      add_control(grp_editor)
 
       txt_application = SKUI::Textbox.new(Editor.application)
       txt_application.name = :application
@@ -136,7 +134,7 @@ module TestUp
       txt_application.width = 400
       grp_editor.add_control(txt_application)
 
-      lbl_application = SKUI::Label.new('Application:', txt_application)
+      lbl_application = SKUI::Label.new("Application:", txt_application)
       lbl_application.position(5, 32)
       lbl_application.width = 90
       lbl_application.align = :right
@@ -148,27 +146,26 @@ module TestUp
       txt_arguments.width = 400
       grp_editor.add_control(txt_arguments)
 
-      lbl_arguments = SKUI::Label.new('Arguments:', txt_arguments)
+      lbl_arguments = SKUI::Label.new("Arguments:", txt_arguments)
       lbl_arguments.position(5, 62)
       lbl_arguments.width = 90
       lbl_arguments.align = :right
       grp_editor.add_control(lbl_arguments)
 
-      lbl_argument_help = SKUI::Label.new('Variables: {FILE} {LINE}')
+      lbl_argument_help = SKUI::Label.new("Variables: {FILE} {LINE}")
       lbl_argument_help.position(100, 85)
       lbl_argument_help.width = 400
       grp_editor.add_control(lbl_argument_help)
 
-
       # Dialog Save and Cancel
 
-      btn_cancel = SKUI::Button.new('Cancel') { |control|
+      btn_cancel = SKUI::Button.new("Cancel") { |control|
         control.window.close
       }
       btn_cancel.position(-85, -5)
-      self.add_control(btn_cancel)
+      add_control(btn_cancel)
 
-      btn_save = SKUI::Button.new('Save') { |control|
+      btn_save = SKUI::Button.new("Save") { |control|
         paths = control.window[:paths].items
         application = control.window[:application].value
         arguments = control.window[:arguments].value
@@ -180,11 +177,10 @@ module TestUp
         control.window.close
       }
       btn_save.position(-5, -5)
-      self.add_control(btn_save)
+      add_control(btn_save)
 
       self.cancel_button = btn_cancel
       self.default_button = btn_save
     end
-
   end # class
 end # module

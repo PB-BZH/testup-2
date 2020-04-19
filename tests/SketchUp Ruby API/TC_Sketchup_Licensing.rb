@@ -2,7 +2,7 @@
 # License:: All Rights Reserved.
 # Original Author:: Bugra Barin
 
-require 'testup/testcase'
+require "testup/testcase"
 
 # module Sketchup::Licensing
 # http://www.sketchup.com/intl/developer/docs/ourdoc/licensing
@@ -10,7 +10,6 @@ require 'testup/testcase'
 # Licensing tests are not repeatable unless we find a way to mock the licensing
 # internals. So, just doing API example and parameter tests.
 class TC_Sketchup_Licensing < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -28,7 +27,7 @@ class TC_Sketchup_Licensing < TestUp::TestCase
     ext_id = "4e215280-dd23-40c4-babb-b8a8dd29d5ee"
     ext_lic = Sketchup::Licensing.get_extension_license(ext_id)
     if ext_lic.licensed?
-       puts "Extension is licensed."
+      puts "Extension is licensed."
     end
   end
 
@@ -52,5 +51,4 @@ class TC_Sketchup_Licensing < TestUp::TestCase
       Sketchup::Licensing.get_extension_license(nil)
     end
   end
-
 end # class

@@ -9,15 +9,15 @@ version = "20#{sketchup_version}"
 
 debug_args = '-rdebug "ide port=7000"'
 
-if RUBY_PLATFORM.include?('darwin')
+if RUBY_PLATFORM.include?("darwin")
   # OS X
   sketchup_path = "/Applications/SketchUp\\ #{version}"
-  sketchup = File.join(sketchup_path, 'SketchUp.app')
+  sketchup = File.join(sketchup_path, "SketchUp.app")
   sketchup_command = %(open -a #{sketchup} --args #{debug_args})
 else
   # Windows
-  program_files_32 = ENV['ProgramFiles(x86)'] || 'C:/Program Files (x86)'
-  program_files_64 = ENV['ProgramW6432'] || 'C:/Program Files'
+  program_files_32 = ENV["ProgramFiles(x86)"] || "C:/Program Files (x86)"
+  program_files_64 = ENV["ProgramW6432"] || "C:/Program Files"
 
   sketchup_relative = "SketchUp/SketchUp #{version}/SketchUp.exe"
   sketchup_32 = File.join(program_files_32, sketchup_relative)

@@ -2,13 +2,10 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Sketchup::Materials
 class TC_Sketchup_Materials < TestUp::TestCase
-
   def setup
     start_with_empty_model
   end
@@ -17,14 +14,13 @@ class TC_Sketchup_Materials < TestUp::TestCase
     # ...
   end
 
-
   # ========================================================================== #
   # method Sketchup::Materials.load
 
   def test_load_api_example
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     # Load a material from the shipped SketchUp library. (SketchUp 2016)
-    filename = 'Materials/Brick, Cladding and Siding/Cinder Block.skm'
+    filename = "Materials/Brick, Cladding and Siding/Cinder Block.skm"
     path = Sketchup.find_support_file(filename)
     materials = Sketchup.active_model.materials
     material = materials.load(path)
@@ -32,7 +28,7 @@ class TC_Sketchup_Materials < TestUp::TestCase
 
   def test_load
     # Load a material from the shipped SketchUp library. (SketchUp 2016)
-    filename = 'Materials/Brick, Cladding and Siding/Cinder Block.skm'
+    filename = "Materials/Brick, Cladding and Siding/Cinder Block.skm"
     path = Sketchup.find_support_file(filename)
     materials = Sketchup.active_model.materials
     num_materials = materials.size
@@ -43,7 +39,7 @@ class TC_Sketchup_Materials < TestUp::TestCase
 
   def test_load_existing
     # Load a material from the shipped SketchUp library. (SketchUp 2016)
-    filename = 'Materials/Brick, Cladding and Siding/Cinder Block.skm'
+    filename = "Materials/Brick, Cladding and Siding/Cinder Block.skm"
     path = Sketchup.find_support_file(filename)
     materials = Sketchup.active_model.materials
     num_materials = materials.size
@@ -60,7 +56,7 @@ class TC_Sketchup_Materials < TestUp::TestCase
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     materials = Sketchup.active_model.materials
     assert_raises(RuntimeError) do
-      materials.load('no_such_file.skm')
+      materials.load("no_such_file.skm")
     end
   end
 
@@ -92,9 +88,7 @@ class TC_Sketchup_Materials < TestUp::TestCase
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     materials = Sketchup.active_model.materials
     assert_raises(ArgumentError) do
-      materials.load('foo', 'bar')
+      materials.load("foo", "bar")
     end
   end
-
-
 end # class

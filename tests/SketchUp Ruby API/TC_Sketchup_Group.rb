@@ -2,22 +2,18 @@
 # License:: All Rights Reserved.
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Sketchup::Group
 # http://www.sketchup.com/intl/developer/docs/ourdoc/group
 class TC_Sketchup_Group < TestUp::TestCase
-
   def setup
-    start_with_empty_model()
+    start_with_empty_model
   end
 
   def teardown
     # ...
   end
-
 
   # ========================================================================== #
   # method Sketchup::Group.definition
@@ -48,6 +44,4 @@ class TC_Sketchup_Group < TestUp::TestCase
       group.definition("ZOMG we finally added Group.definition!!")
     end
   end
-
-
 end # class

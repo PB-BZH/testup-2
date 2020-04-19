@@ -2,12 +2,9 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
 
-
 class TC_Sketchup_InputPoint < TestUp::TestCase
-
   def setup
     start_with_empty_model
     @path = create_test_instances
@@ -17,11 +14,10 @@ class TC_Sketchup_InputPoint < TestUp::TestCase
     # ...
   end
 
-
   # Model > ComponentInstance > Group1 > Group2 > Group3 > Edge
   def create_test_instances
     model = Sketchup.active_model
-    definition = model.definitions.add('TC_Sketchup_InputPoint')
+    definition = model.definitions.add("TC_Sketchup_InputPoint")
     group1 = definition.entities.add_group
     group2 = group1.entities.add_group
     group2.transform!([10, 20, 30])
@@ -37,7 +33,7 @@ class TC_Sketchup_InputPoint < TestUp::TestCase
       entity.is_a?(Sketchup::Group) || entity.is_a?(Sketchup::ComponentInstance)
     }
     tr = Geom::Transformation.new
-    instances.each { |instance| tr = tr * instance.transformation }
+    instances.each { |instance| tr *= instance.transformation }
     tr
   end
 
@@ -47,7 +43,6 @@ class TC_Sketchup_InputPoint < TestUp::TestCase
     Geom.linear_combination(0.5, pt1, 0.5, pt2)
   end
 
-
   # ========================================================================== #
   # class Sketchup::InputPoint
 
@@ -55,10 +50,9 @@ class TC_Sketchup_InputPoint < TestUp::TestCase
     # TODO:
   end
 
-
   # ========================================================================== #
   # method Sketchup::InputPoint.instance_path
-  
+
   def test_instance_path
     skip("Implemented in SU2017") if Sketchup.version.to_i < 17
     path = @path
@@ -90,5 +84,4 @@ class TC_Sketchup_InputPoint < TestUp::TestCase
       inputpoint.instance_path(nil)
     }
   end
-
 end # class

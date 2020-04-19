@@ -2,14 +2,11 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Sketchup::Edge
 # http://www.sketchup.com/intl/en/developer/docs/ourdoc/edge
 class TC_Geom_BoundingBox < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -17,7 +14,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
   def teardown
     # ...
   end
-
 
   # ========================================================================== #
   # class Geom::BoundingBox
@@ -36,7 +32,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     boundingbox = Geom::BoundingBox.new
   end
 
-
   # ========================================================================== #
   # method Geom::BoundingBox.add
   # http://www.sketchup.com/intl/developer/docs/ourdoc/boundingbox#add
@@ -53,7 +48,7 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     boundingbox = Geom::BoundingBox.new
     boundingbox.add(Geom::Point3d.new(100, 200, 300))
 
-    result = boundingbox.add( Geom::Point3d.new(200, 400, 200))
+    result = boundingbox.add(Geom::Point3d.new(200, 400, 200))
     assert_equal(boundingbox, result)
     assert_equal(Geom::Point3d.new(100, 200, 200), boundingbox.corner(0))
     assert_equal(Geom::Point3d.new(200, 400, 300), boundingbox.corner(7))
@@ -126,14 +121,14 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     boundingbox.add(point1, point2)
 
     boundingbox2 = Geom::BoundingBox.new
-    point3 = Geom::Point3d.new(-200, 600,  100)
-    point4 = Geom::Point3d.new( 300, 100, -100)
+    point3 = Geom::Point3d.new(-200, 600, 100)
+    point4 = Geom::Point3d.new(300, 100, -100)
     boundingbox2.add(point3, point4)
 
     result = boundingbox.add(boundingbox2)
     assert_equal(boundingbox, result)
     assert_equal(Geom::Point3d.new(-200, 100, -100), boundingbox.corner(0))
-    assert_equal(Geom::Point3d.new( 300, 600,  300), boundingbox.corner(7))
+    assert_equal(Geom::Point3d.new(300, 600, 300), boundingbox.corner(7))
   end
 
   def test_add_boundingboxes
@@ -143,19 +138,19 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     boundingbox.add(point1, point2)
 
     boundingbox2 = Geom::BoundingBox.new
-    point3 = Geom::Point3d.new(-200, 600,  100)
-    point4 = Geom::Point3d.new( 300, 100, -100)
+    point3 = Geom::Point3d.new(-200, 600, 100)
+    point4 = Geom::Point3d.new(300, 100, -100)
     boundingbox2.add(point3, point4)
 
     boundingbox3 = Geom::BoundingBox.new
-    point5 = Geom::Point3d.new(500,  400, 800)
+    point5 = Geom::Point3d.new(500, 400, 800)
     point6 = Geom::Point3d.new(300, -100, 100)
     boundingbox3.add(point5, point6)
 
     result = boundingbox.add(boundingbox2, boundingbox3)
     assert_equal(boundingbox, result)
     assert_equal(Geom::Point3d.new(-200, -100, -100), boundingbox.corner(0))
-    assert_equal(Geom::Point3d.new( 500,  600,  800), boundingbox.corner(7))
+    assert_equal(Geom::Point3d.new(500, 600, 800), boundingbox.corner(7))
   end
 
   def test_add_array_of_boundingboxes
@@ -166,26 +161,26 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     boundingbox.add(point1, point2)
 
     boundingbox2 = Geom::BoundingBox.new
-    point3 = Geom::Point3d.new(-200, 600,  100)
-    point4 = Geom::Point3d.new( 300, 100, -100)
+    point3 = Geom::Point3d.new(-200, 600, 100)
+    point4 = Geom::Point3d.new(300, 100, -100)
     boundingbox2.add(point3, point4)
 
     boundingbox3 = Geom::BoundingBox.new
-    point5 = Geom::Point3d.new(500,  400, 800)
+    point5 = Geom::Point3d.new(500, 400, 800)
     point6 = Geom::Point3d.new(300, -100, 100)
     boundingbox3.add(point5, point6)
 
     result = boundingbox.add([boundingbox2, boundingbox3])
     assert_equal(boundingbox, result)
     assert_equal(Geom::Point3d.new(-200, -100, -100), boundingbox.corner(0))
-    assert_equal(Geom::Point3d.new( 500,  600,  800), boundingbox.corner(7))
+    assert_equal(Geom::Point3d.new(500, 600, 800), boundingbox.corner(7))
   end
 
   def test_add_array_as_point
     boundingbox = Geom::BoundingBox.new
     boundingbox.add(Geom::Point3d.new(100, 200, 300))
 
-    result = boundingbox.add( [200, 400, 200] )
+    result = boundingbox.add([200, 400, 200])
     assert_equal(boundingbox, result)
     assert_equal(Geom::Point3d.new(100, 200, 200), boundingbox.corner(0))
     assert_equal(Geom::Point3d.new(200, 400, 300), boundingbox.corner(7))
@@ -276,7 +271,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Geom::BoundingBox.center
   # http://www.sketchup.com/intl/developer/docs/ourdoc/boundingbox#center
@@ -335,7 +329,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Geom::BoundingBox.clear
   # http://www.sketchup.com/intl/developer/docs/ourdoc/boundingbox#clear
@@ -371,7 +364,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
       boundingbox.clear(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Geom::BoundingBox.contains?
@@ -494,7 +486,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
       boundingbox.contains?(123)
     end
   end
-
 
   # ========================================================================== #
   # method Geom::BoundingBox.corner
@@ -706,7 +697,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Geom::BoundingBox.depth
   # http://www.sketchup.com/intl/developer/docs/ourdoc/boundingbox#depth
@@ -742,7 +732,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
       boundingbox.depth(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Geom::BoundingBox.diagonal
@@ -782,7 +771,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
       boundingbox.diagonal(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Geom::BoundingBox.empty?
@@ -889,7 +877,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Geom::BoundingBox.height
   # http://www.sketchup.com/intl/developer/docs/ourdoc/boundingbox#height
@@ -925,7 +912,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
       boundingbox.height(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Geom::BoundingBox.intersect
@@ -1005,7 +991,7 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     boundingbox1 = Geom::BoundingBox.new
     boundingbox1.add([100, 200, -400], [200, 400, 300])
     boundingbox2 = Geom::BoundingBox.new
-    boundingbox2.add([100, 200,  300], [200, 400, 500])
+    boundingbox2.add([100, 200, 300], [200, 400, 500])
 
     boundingbox = boundingbox1.intersect(boundingbox2)
     assert_kind_of(Geom::BoundingBox, boundingbox)
@@ -1059,7 +1045,7 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     boundingbox1 = Geom::BoundingBox.new
     boundingbox1.add([100, 200, -400], [200, 400, 300])
     boundingbox2 = Geom::BoundingBox.new
-    boundingbox2.add([100, 200,  300 + half_tolerance], [200, 400, 500])
+    boundingbox2.add([100, 200, 300 + half_tolerance], [200, 400, 500])
 
     boundingbox = boundingbox1.intersect(boundingbox2)
     assert_kind_of(Geom::BoundingBox, boundingbox)
@@ -1184,7 +1170,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Geom::BoundingBox.max
   # http://www.sketchup.com/intl/developer/docs/ourdoc/boundingbox#max
@@ -1224,7 +1209,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
       boundingbox.max(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Geom::BoundingBox.min
@@ -1266,7 +1250,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Geom::BoundingBox.new
   # http://www.sketchup.com/intl/developer/docs/ourdoc/boundingbox#new
@@ -1288,7 +1271,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
       Geom::BoundingBox.new(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Geom::BoundingBox.valid?
@@ -1395,7 +1377,6 @@ class TC_Geom_BoundingBox < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Geom::BoundingBox.width
   # http://www.sketchup.com/intl/developer/docs/ourdoc/boundingbox#width
@@ -1431,6 +1412,4 @@ class TC_Geom_BoundingBox < TestUp::TestCase
       boundingbox.width(nil)
     end
   end
-
-
 end # class

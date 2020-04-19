@@ -9,7 +9,6 @@
 # in our Ruby API.
 
 module TestUp
-
   # TODO(thomthom): Add LayOut console class.
   if defined?(Sketchup)
     BASE_CONSOLE_CLASS = Sketchup::Console
@@ -24,13 +23,12 @@ module TestUp
   # nativly. Both applications should be in sync for the capabilities of the
   # console.
   class Console < BASE_CONSOLE_CLASS
-
     def print(*args)
       if args.empty?
         write($_)
       else
-        glue = $, || ''
-        record_separator = $\ || ''
+        glue = $, || ""
+        record_separator = $\ || ""
         output = args.join(glue) << record_separator
         write(output)
       end
@@ -41,7 +39,7 @@ module TestUp
       if args.empty?
         write $/
       else
-        for arg in args
+        args.each do |arg|
           line = arg.to_s
           write(line)
           if line.empty? || !line.end_with?($/)
@@ -65,9 +63,7 @@ module TestUp
     def external_encoding
       Encoding::UTF_8
     end
-
   end # class Console
 
   TESTUP_CONSOLE = Console.new
-
 end # module TestUp

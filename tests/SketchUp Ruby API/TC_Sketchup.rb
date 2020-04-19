@@ -2,14 +2,11 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # module Sketchup
 # http://www.sketchup.com/intl/en/developer/docs/ourdoc/sketchup
 class TC_Sketchup < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -17,7 +14,6 @@ class TC_Sketchup < TestUp::TestCase
   def teardown
     # ...
   end
-
 
   # ========================================================================== #
   # method Sketchup.debug_mode?
@@ -48,7 +44,6 @@ class TC_Sketchup < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup.is_64bit?
   # http://www.sketchup.com/intl/developer/docs/ourdoc/sketchup#is_64bit?
@@ -67,7 +62,7 @@ class TC_Sketchup < TestUp::TestCase
 
   def test_is_64bit_Query
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
-    pointer_size = ['a'].pack('P').size * 8
+    pointer_size = ["a"].pack("P").size * 8
     expected = pointer_size == 64
     result = Sketchup.is_64bit?
     assert_equal(expected, result)
@@ -79,7 +74,6 @@ class TC_Sketchup < TestUp::TestCase
       Sketchup.is_64bit?(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup.platform
@@ -100,7 +94,7 @@ class TC_Sketchup < TestUp::TestCase
     result = Sketchup.template
     assert(result != "", "Template is blank")
     assert(result.downcase.end_with?(".skp"), "Template is not a SKP file")
-  end  
+  end
 
   def test_template_Set
     # Get the current template
@@ -111,22 +105,20 @@ class TC_Sketchup < TestUp::TestCase
       template_dir = Sketchup.get_resource_path("Templates")
       new_template = ""
       Dir.entries(template_dir).each do |template|
-        next if !template.downcase.end_with?('.skp')
+        next unless template.downcase.end_with?(".skp")
         next if orig_template.downcase.end_with?(template.downcase)
         new_template = File.join(template_dir, template)
         break
       end
 
       assert(new_template != "", "Could not find any templates.")
-      
+
       # Set the default template and verify it set properly
       Sketchup.template = new_template
       new_default = Sketchup.template
       assert_equal(new_template, new_default, "Default template did not save properly.")
-    
     ensure
       Sketchup.template = orig_template
     end
   end
-  
 end # class

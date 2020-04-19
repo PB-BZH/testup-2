@@ -4,27 +4,26 @@ module SKUI
   #
   # @since 1.0.0
   module Properties
-
     private
 
     # @param [Symbol] symbols
     #
     # @return [Nil]
     # @since 1.0.0
-    def prop( *symbols, &block )
-      prop_reader( *symbols )
-      prop_writer( *symbols, &block )
+    def prop(*symbols, &block)
+      prop_reader(*symbols)
+      prop_writer(*symbols, &block)
       nil
     end
-    alias :prop_accessor :prop
+    alias prop_accessor prop
 
     # @param [Symbol] symbols
     #
     # @return [Nil]
     # @since 1.0.0
-    def prop_bool( *symbols )
-      prop_reader_bool( *symbols )
-      prop_writer( *symbols )
+    def prop_bool(*symbols)
+      prop_reader_bool(*symbols)
+      prop_writer(*symbols)
       nil
     end
 
@@ -32,18 +31,18 @@ module SKUI
     #
     # @return [Nil]
     # @since 1.0.0
-    def prop_reader( *symbols )
-      self.class_eval {
+    def prop_reader(*symbols)
+      class_eval do
         # (i) Must use `#each` instead of `for in` because otherwise the symbol
         #     variable would not be locale to each method definition and
         #     @properties[ symbol ] would point to the last `symbol` in the
         #     `symbols` array.
-        symbols.each { |symbol|
-          define_method( symbol ) {
-            @properties[ symbol ]
+        symbols.each do |symbol|
+          define_method(symbol) {
+            @properties[symbol]
           }
-        }
-      }
+        end
+      end
       nil
     end
 
@@ -51,15 +50,15 @@ module SKUI
     #
     # @return [Nil]
     # @since 1.0.0
-    def prop_reader_bool( *symbols )
-      self.class_eval {
-        symbols.each { |symbol|
+    def prop_reader_bool(*symbols)
+      class_eval do
+        symbols.each do |symbol|
           symbol_bool = "#{symbol}?".intern
-          define_method( symbol_bool ) {
-            @properties[ symbol ]
+          define_method(symbol_bool) {
+            @properties[symbol]
           }
-        }
-      }
+        end
+      end
       nil
     end
 
@@ -71,20 +70,19 @@ module SKUI
     #
     # @return [Nil]
     # @since 1.0.0
-    def prop_writer( *symbols, &block )
-      self.class_eval {
-        symbols.each { |symbol|
+    def prop_writer(*symbols, &block)
+      class_eval do
+        symbols.each do |symbol|
           symbol_set = "#{symbol}=".intern
-          define_method( symbol_set ) { |value|
-            value = block.call( value ) if block
-            @properties[ symbol ] = value
-            update_properties( symbol )
+          define_method(symbol_set) { |value|
+            value = block.call(value) if block
+            @properties[symbol] = value
+            update_properties(symbol)
             value
           }
-        }
-      }
+        end
+      end
       nil
     end
-
   end # module
 end # module

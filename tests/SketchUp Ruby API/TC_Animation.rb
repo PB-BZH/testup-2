@@ -2,14 +2,11 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # interface class Animation
 # http://www.sketchup.com/intl/developer/docs/ourdoc/animation
 class TC_Animation < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -18,18 +15,14 @@ class TC_Animation < TestUp::TestCase
     # ...
   end
 
-
   class TestAnimation
-
     def initialize(frames_to_play = 1)
       @play_state = :not_started
       @frames_to_play = frames_to_play
       @frames = 0
     end
 
-    def play_state
-      @play_state
-    end
+    attr_reader :play_state
 
     def nextFrame(view)
       @play_state = :playing
@@ -39,16 +32,14 @@ class TC_Animation < TestUp::TestCase
       view.show_frame
 
       # Play only five frames at a time.
-      @frames = @frames + 1
+      @frames += 1
       @frames < 5
     end
 
     def stop
       @play_state = :stopped
     end
-
   end # class TestAnimation
-
 
   # Intercept menu code to avoid tests from creating a flood of test menus.
   module UI
@@ -56,7 +47,6 @@ class TC_Animation < TestUp::TestCase
       TestUp::MenuGuard.menu(title)
     end
   end
-
 
   # ========================================================================== #
   # class Animation
@@ -91,7 +81,6 @@ class TC_Animation < TestUp::TestCase
     Sketchup.active_model.active_view.animation = nil
   end
 
-
   # ========================================================================== #
   # method Animation.nextFrame
   # http://www.sketchup.com/intl/developer/docs/ourdoc/animation#nextFrame
@@ -100,14 +89,13 @@ class TC_Animation < TestUp::TestCase
     def nextFrame(view)
       # Insert your handler code for updating the camera or other entities.
       view.show_frame
-      return true
+      true
     end
   end
 
   def test_nextFrame
     skip("Needs manual testing. Asynchronous callback.")
   end
-
 
   # ========================================================================== #
   # method Animation.pause
@@ -127,7 +115,6 @@ class TC_Animation < TestUp::TestCase
     )
   end
 
-
   # ========================================================================== #
   # method Animation.resume
   # http://www.sketchup.com/intl/developer/docs/ourdoc/animation#resume
@@ -145,7 +132,6 @@ class TC_Animation < TestUp::TestCase
       "Missing API method to resume animation."
     )
   end
-
 
   # ========================================================================== #
   # method Animation.stop
@@ -169,6 +155,4 @@ class TC_Animation < TestUp::TestCase
     assert_equal(:stopped, animation.play_state,
       "The stop method was not called as expected.")
   end
-
-
 end # class

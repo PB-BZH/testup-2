@@ -1,7 +1,6 @@
 module SKUI
   # @since 1.0.0
   module Debug
-
     @enabled = false
 
     # @since 1.0.0
@@ -10,12 +9,12 @@ module SKUI
     end
 
     # @since 1.0.0
-    def self.enabled=( value )
-      @enabled = ( value ) ? true : false
+    def self.enabled=(value)
+      @enabled = value ? true : false
     end
 
     # @since 1.0.0
-    def self.puts( *args )
+    def self.puts(*args)
       p *args if @enabled
     end
 
@@ -44,7 +43,7 @@ module SKUI
         Rect
       ]
       values = keys.map { |klass|
-        ObjectSpace.each_object( klass ) {}
+        ObjectSpace.each_object(klass) {}
       }
       references = Hash[*keys.zip(values).flatten]
 
@@ -52,13 +51,12 @@ module SKUI
       Kernel.puts "============================================================"
       Kernel.puts " ObjectSpace References"
       Kernel.puts "============================================================"
-      for klass, count in references
+      references.each do |klass, count|
         Kernel.puts " #{klass.to_s.ljust(20)} : #{count}"
       end
       Kernel.puts "============================================================"
       Kernel.puts ""
       nil
     end
-
   end # class
 end # module

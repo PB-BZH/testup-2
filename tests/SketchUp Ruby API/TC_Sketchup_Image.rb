@@ -2,22 +2,18 @@
 # License:: All Rights Reserved.
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Sketchup::Image
 # http://www.sketchup.com/intl/developer/docs/ourdoc/image
 class TC_Sketchup_Image < TestUp::TestCase
-
   def setup
-    start_with_empty_model()
+    start_with_empty_model
   end
 
   def teardown
     # ...
   end
-
 
   def create_test_image
     entities = Sketchup.active_model.entities
@@ -25,7 +21,6 @@ class TC_Sketchup_Image < TestUp::TestCase
     image = Sketchup.active_model.entities.add_image(filename, ORIGIN, 1.m)
     image
   end
-
 
   # ========================================================================== #
   # method Sketchup::Image.explode
@@ -40,7 +35,7 @@ class TC_Sketchup_Image < TestUp::TestCase
   end
 
   def test_explode
-    image = create_test_image()
+    image = create_test_image
     result = image.explode
     assert_kind_of(Array, result)
     assert(image.deleted?)
@@ -48,19 +43,17 @@ class TC_Sketchup_Image < TestUp::TestCase
 
   def test_explode_return_entities
     skip("Fixed in SU2015") if Sketchup.version.to_i < 15
-    image = create_test_image()
+    image = create_test_image
     result = image.explode
     assert_kind_of(Array, result)
     assert(!result.empty?, "Returned array wasn't empty.")
-    assert(result.all? { |entity| entity.is_a?(Sketchup::Entity)})
+    assert(result.all? { |entity| entity.is_a?(Sketchup::Entity) })
   end
 
   def test_explode_incorrect_number_of_arguments_one
-    image = create_test_image()
+    image = create_test_image
     assert_raises ArgumentError do
       image.explode(123)
     end
   end
-
-
 end # class

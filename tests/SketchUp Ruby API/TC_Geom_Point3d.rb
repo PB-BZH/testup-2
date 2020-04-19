@@ -2,14 +2,11 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # class Geom::Point3d
 # http://www.sketchup.com/intl/developer/docs/ourdoc/point3d
 class TC_Geom_Point3d < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -17,7 +14,6 @@ class TC_Geom_Point3d < TestUp::TestCase
   def teardown
     # ...
   end
-
 
   # ========================================================================== #
   # class Geom::Point3d
@@ -34,7 +30,6 @@ class TC_Geom_Point3d < TestUp::TestCase
     # values to a variable as an array:
     point3 = [100, 200, 300]
   end
-
 
   # ========================================================================== #
   # method Geom::Point3d.vector_to
@@ -111,13 +106,11 @@ class TC_Geom_Point3d < TestUp::TestCase
     point2 = Geom::Point3d.new(4, 5, 8)
 
     assert_raises(ArgumentError, "No arguments") do
-      point1.vector_to()
+      point1.vector_to
     end
 
     assert_raises(ArgumentError, "Two arguments") do
       point1.vector_to(point2, point2)
     end
   end
-
-
 end # class

@@ -2,17 +2,15 @@
 # License:: All Rights Reserved.
 # Original Author:: Thomas Thomassen
 
-require 'testup/testcase'
+require "testup/testcase"
 
 # module Sketchup::RegionalSettings
 # http://www.sketchup.com/intl/developer/docs/ourdoc/locale
 class TC_Sketchup_RegionalSettings < TestUp::TestCase
-
   # Technically this can be other values, but this is what 99.99% of locale
   # settings. (Data pulled from thin air...)
-  EXPECTED_DECIMAL_SEPARATORS = ['.', ','].freeze
-  EXPECTED_LIST_SEPARATORS    = [',', ';'].freeze
-
+  EXPECTED_DECIMAL_SEPARATORS = [".", ","].freeze
+  EXPECTED_LIST_SEPARATORS = [",", ";"].freeze
 
   def setup
     # ...
@@ -22,7 +20,6 @@ class TC_Sketchup_RegionalSettings < TestUp::TestCase
     # ...
   end
 
-
   # ========================================================================== #
   # method Sketchup::RegionalSettings.decimal_separator
   # http://www.sketchup.com/intl/developer/docs/ourdoc/locale#decimal_separator
@@ -31,7 +28,7 @@ class TC_Sketchup_RegionalSettings < TestUp::TestCase
     skip("Implemented in SU2016 M1") if Sketchup.version.to_i < 16
     # Format a Float using the user's locale settings.
     # Ruby's Float.to_s always use period as decimal separator.
-    formatted = 0.123.to_s.tr('.', Sketchup::RegionalSettings.decimal_separator)
+    formatted = 0.123.to_s.tr(".", Sketchup::RegionalSettings.decimal_separator)
   end
 
   def test_decimal_separator
@@ -48,7 +45,6 @@ class TC_Sketchup_RegionalSettings < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::RegionalSettings.list_separator
   # http://www.sketchup.com/intl/developer/docs/ourdoc/locale#list_separator
@@ -59,7 +55,7 @@ class TC_Sketchup_RegionalSettings < TestUp::TestCase
     decimal = Sketchup::RegionalSettings.decimal_separator
     list = Sketchup::RegionalSettings.list_separator
     row = [3.14, 1.618, 2.718]
-    csv = row.map { |value| value.to_s.tr('.', decimal) }.join(list)
+    csv = row.map { |value| value.to_s.tr(".", decimal) }.join(list)
   end
 
   def test_list_separator
@@ -75,6 +71,4 @@ class TC_Sketchup_RegionalSettings < TestUp::TestCase
       Sketchup::RegionalSettings.list_separator(1)
     end
   end
-
-
 end # class

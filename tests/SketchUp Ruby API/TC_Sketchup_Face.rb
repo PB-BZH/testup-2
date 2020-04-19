@@ -2,14 +2,11 @@
 # License:: The MIT License (MIT)
 # Original Author:: Chris Fullmer
 
-
 require "testup/testcase"
-
 
 # class Sketchup::Face
 # http://www.sketchup.com/intl/en/en/developer/docs/ourdoc/face
 class TC_Sketchup_Face < TestUp::TestCase
-
   def setup
     start_with_empty_model
   end
@@ -17,7 +14,6 @@ class TC_Sketchup_Face < TestUp::TestCase
   def teardown
     # ...
   end
-
 
   # ========================================================================== #
   # Local test utilities.
@@ -42,7 +38,8 @@ class TC_Sketchup_Face < TestUp::TestCase
     component.behavior.is2d = true
     inner_face.pushpull(-20, true)
     instance = Sketchup.active_model.active_entities.add_instance(
-      component, Geom::Transformation.new)
+      component, Geom::Transformation.new
+    )
     instance.glued_to = face
     [face, instance]
   end
@@ -51,15 +48,16 @@ class TC_Sketchup_Face < TestUp::TestCase
     path = Sketchup.temp_dir
     full_name = File.join(path, "temp_image.jpg")
     Sketchup.active_model.active_view.write_image(
-      full_name, 500, 500, false, 0.0)
+      full_name, 500, 500, false, 0.0
+    )
     material = Sketchup.active_model.materials.add("Test Material")
     material.texture = full_name
     material
   end
 
   def create_face_with_hole
-    p1, p2, p3, p4 = [-1000, -1000, 0], [1000, -1000, 0], [1000, 1000,0],
-      [-1000, 1000, 0]
+    p1, p2, p3, p4 = [-1000, -1000, 0], [1000, -1000, 0], [1000, 1000, 0],
+                     [-1000, 1000, 0]
     face1 = Sketchup.active_model.active_entities.add_face(p1, p2, p3, p4)
     face2 = create_face
     face1
@@ -188,7 +186,7 @@ class TC_Sketchup_Face < TestUp::TestCase
 
     assert_raises(ArgumentError) do
       face.area(["Array that is not a transformation matrix"],
-      "An array that did not contain a Transformation Matrix was accepted as
+        "An array that did not contain a Transformation Matrix was accepted as
       a valid argument")
     end
 
@@ -204,7 +202,8 @@ class TC_Sketchup_Face < TestUp::TestCase
   def test_area_transformed
     face = create_face
     transform = Geom::Transformation.new(
-      [0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1])
+      [0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1]
+    )
     area = face.area(transform)
     assert_in_delta(2500.0, area, SKETCHUP_FLOAT_TOLERANCE)
   end
@@ -212,7 +211,8 @@ class TC_Sketchup_Face < TestUp::TestCase
   def test_area_valid_argument_transformation_object
     face = create_face
     transform = Geom::Transformation.new(
-      [0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1])
+      [0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1]
+    )
     area = face.area(transform)
     assert_kind_of(Float, area)
   end
@@ -297,7 +297,6 @@ class TC_Sketchup_Face < TestUp::TestCase
     status = face.back_material = "red"
   end
 
-
   def test_back_material_Set_Integer
     face = create_face
     result = face.back_material = 255
@@ -312,7 +311,7 @@ class TC_Sketchup_Face < TestUp::TestCase
 
   def test_back_material_Set_HexString
     face = create_face
-    result = face.back_material = '#ff0000'
+    result = face.back_material = "#ff0000"
     assert_kind_of(String, result)
   end
 
@@ -338,13 +337,13 @@ class TC_Sketchup_Face < TestUp::TestCase
     face = create_face
     material = Sketchup.active_model.materials.add("Material")
     material.color = "red"
-    result = face.back_material = (material)
+    result = face.back_material = material
     assert_kind_of(Sketchup::Material, result)
   end
 
   def test_back_material_Set_sketchupcolor
     face = create_face
-    result = face.back_material = (Sketchup::Color.new("red"))
+    result = face.back_material = Sketchup::Color.new("red")
     assert_kind_of(Sketchup::Color, result)
   end
 
@@ -357,9 +356,9 @@ class TC_Sketchup_Face < TestUp::TestCase
     skip("Broken in SU2014") if Sketchup.version.to_i == 14
     face = create_face
 
-    #assert_raises(TypeError) do
+    # assert_raises(TypeError) do
     #  face.back_material = nil
-    #end
+    # end
 
     assert_raises(ArgumentError) do
       face.back_material = "invalid color name"
@@ -390,35 +389,35 @@ class TC_Sketchup_Face < TestUp::TestCase
     pt = Geom::Point3d.new(50, 50, 0)
     result = face.classify_point(pt)
     if result == Sketchup::Face::PointOutside
-      puts "#{pt.to_s} is outside the face"
+      puts "#{pt} is outside the face"
     end
 
     # Check a point that should be outside inside the face.
     pt = Geom::Point3d.new(1, 1, 0)
     result = face.classify_point(pt)
     if result == Sketchup::Face::PointInside
-      puts "#{pt.to_s} is inside the face"
+      puts "#{pt} is inside the face"
     end
 
     # Check a point that should be on the vertex of the face.
     pt = Geom::Point3d.new(0, 0, 0)
     result = face.classify_point(pt)
     if result == Sketchup::Face::PointOnVertex
-      puts "#{pt.to_s} is on a vertex"
+      puts "#{pt} is on a vertex"
     end
 
     # Check a point that should be on the edge of the face.
     pt = Geom::Point3d.new(0, 1, 0)
     result = face.classify_point(pt)
     if result == Sketchup::Face::PointOnEdge
-      puts "#{pt.to_s} is on an edge of the face"
+      puts "#{pt} is on an edge of the face"
     end
 
     # Check a point that should be off the plane of the face.
     pt = Geom::Point3d.new(1, 1, 10)
     result = face.classify_point(pt)
     if result == Sketchup::Face::PointNotOnPlane
-      puts "#{pt.to_s} is not on the same plane as the face"
+      puts "#{pt} is not on the same plane as the face"
     end
   end
 
@@ -461,7 +460,6 @@ class TC_Sketchup_Face < TestUp::TestCase
     result = face.classify_point(pt)
     assert_equal(Sketchup::Face::PointNotOnPlane, result)
   end
-
 
   def test_classify_point_arity
     assert_equal(1, Sketchup::Face.instance_method(:classify_point).arity)
@@ -516,7 +514,7 @@ class TC_Sketchup_Face < TestUp::TestCase
     face = create_face
     result = face.edges
     assert(result.all? { |entity| entity.is_a?(Sketchup::Edge) },
-      'Not all entities returned were edges.')
+      "Not all entities returned were edges.")
   end
 
   def test_edges_return_array_length
@@ -552,7 +550,6 @@ class TC_Sketchup_Face < TestUp::TestCase
       face.edges(nil)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Face.followme
@@ -636,9 +633,9 @@ class TC_Sketchup_Face < TestUp::TestCase
       face.followme(["Can't use array"])
     end
 
-    #assert_raises(ArgumentError) do
+    # assert_raises(ArgumentError) do
     #  face.followme(nil)
-    #end
+    # end
   end
 
   # ========================================================================== #
@@ -707,7 +704,6 @@ class TC_Sketchup_Face < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Sketchup::Face.get_texture_projection
   # http://www.sketchup.com/intl/en/developer/docs/ourdoc/face#get_texture_projection
@@ -768,8 +764,8 @@ class TC_Sketchup_Face < TestUp::TestCase
     face.set_texture_projection(vector, false)
     result = face.get_texture_projection(false)
 
-    assert_equal(true, (result == vector), "Vector #{vector.to_s} was assigned
-      to the projection, but #{result.to_s} was returned.
+    assert_equal(true, (result == vector), "Vector #{vector} was assigned
+      to the projection, but #{result} was returned.
       They should compare equal.")
   end
 
@@ -788,15 +784,16 @@ class TC_Sketchup_Face < TestUp::TestCase
 
   def test_get_texture_projection_arity
     assert_equal(1, Sketchup::Face.instance_method(
-      :get_texture_projection).arity)
+      :get_texture_projection
+    ).arity)
   end
 
-  #def test_get_texture_projection_invalid_arguments
-    # No tests for invalid arguments, since no incorrect arguments are throwing
-    # errors.  We should consider adding better error handling for incorrect
-    # arguments to most of the methods in this class.  There are many arguments
-    # that are allowed, even though they are wrong.
-  #end
+  # def test_get_texture_projection_invalid_arguments
+  # No tests for invalid arguments, since no incorrect arguments are throwing
+  # errors.  We should consider adding better error handling for incorrect
+  # arguments to most of the methods in this class.  There are many arguments
+  # that are allowed, even though they are wrong.
+  # end
 
   # ========================================================================== #
   # method Sketchup::Face.get_UVHelper
@@ -898,7 +895,7 @@ class TC_Sketchup_Face < TestUp::TestCase
     face = create_face_with_hole
     result = face.loops
     assert(result.all? { |entity| entity.is_a?(Sketchup::Loop) },
-      'Not all entities returned were Loops.')
+      "Not all entities returned were Loops.")
   end
 
   def test_loops_return_array_length
@@ -1023,7 +1020,7 @@ class TC_Sketchup_Face < TestUp::TestCase
 
   def test_material_Set_HexString
     face = create_face
-    result = face.material = '#ff0000'
+    result = face.material = "#ff0000"
     assert_kind_of(String, result)
   end
 
@@ -1055,7 +1052,7 @@ class TC_Sketchup_Face < TestUp::TestCase
 
   def test_material_Set_sketchupcolor
     face = create_face
-    result = face.material = (Sketchup::Color.new("red"))
+    result = face.material = Sketchup::Color.new("red")
     assert_kind_of(Sketchup::Color, result)
   end
 
@@ -1085,9 +1082,9 @@ class TC_Sketchup_Face < TestUp::TestCase
       face.material = ["Array"]
     end
 
-    #assert_raises(TypeError) do
+    # assert_raises(TypeError) do
     #  face.material = nil
-    #end
+    # end
   end
 
   # ========================================================================== #
@@ -1152,14 +1149,13 @@ class TC_Sketchup_Face < TestUp::TestCase
     face = create_face_with_hole
 
     # Should raise an error, but does not
-    #assert_raises(TypeError) do
+    # assert_raises(TypeError) do
     #  face.mesh(12)
-    #end
+    # end
 
     assert_raises(RangeError) do
       face.mesh(-5)
     end
-
   end
 
   # ========================================================================== #
@@ -1187,14 +1183,15 @@ class TC_Sketchup_Face < TestUp::TestCase
     face = entities.add_face([0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0])
     vector = Geom::Vector3d.new(0, 0, -1)
     result = face.normal
-    assert_equal(vector,result)
+    assert_equal(vector, result)
   end
 
   def test_normal_return_value_face_in_space
-    p1,p2,p3 = [0, 0, 0], [10, 0, 10], [20, 10, 10]
+    p1, p2, p3 = [0, 0, 0], [10, 0, 10], [20, 10, 10]
     face = Sketchup.active_model.active_entities.add_face(p1, p2, p3)
     vector = Geom::Vector3d.new(
-      -0.5773502691896258, 0.5773502691896257, 0.5773502691896258)
+      -0.5773502691896258, 0.5773502691896257, 0.5773502691896258
+    )
     result = face.normal
 
     assert_equal(true, (vector == result))
@@ -1286,8 +1283,8 @@ class TC_Sketchup_Face < TestUp::TestCase
   # http://www.sketchup.com/intl/en/developer/docs/ourdoc/face#plane
 
   def test_plane_api_example
-    point1 = Geom::Point3d.new(0,0,0)
-    point2 = Geom::Point3d.new(0,0,100)
+    point1 = Geom::Point3d.new(0, 0, 0)
+    point2 = Geom::Point3d.new(0, 0, 100)
     depth = 100
     width = 100
     model = Sketchup.active_model
@@ -1302,7 +1299,6 @@ class TC_Sketchup_Face < TestUp::TestCase
     face = entities.add_face(pts)
     plane = face.plane
   end
-
 
   def test_plane_return_type
     face = create_face
@@ -1413,16 +1409,14 @@ class TC_Sketchup_Face < TestUp::TestCase
       face.position_material(false, false, false)
     end
 
-    #assert_raises(ArgumentError) do
+    # assert_raises(ArgumentError) do
     #  face.position_material(1, 2, 3)
-    #end
+    # end
 
-    #assert_raises(ArgumentError) do
+    # assert_raises(ArgumentError) do
     #  face.position_material(nil, nil, nil)
-    #end
+    # end
   end
-
-
 
   # ========================================================================== #
   # method Sketchup::Face.pushpull
@@ -1492,15 +1486,14 @@ class TC_Sketchup_Face < TestUp::TestCase
       face.pushpull(false, false)
     end
 
-    #assert_raises(ArgumentError) do
+    # assert_raises(ArgumentError) do
     #  face.pushpull(1, 2)
-    #end
+    # end
 
     assert_raises(TypeError) do
       face.pushpull(nil, nil)
     end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Face.reverse!
@@ -1552,9 +1545,9 @@ class TC_Sketchup_Face < TestUp::TestCase
       face.pushpull(false)
     end
 
-    #assert_raises(ArgumentError) do
+    # assert_raises(ArgumentError) do
     #  face.pushpull(1, 2)
-    #end
+    # end
 
     assert_raises(TypeError) do
       face.pushpull(nil)
@@ -1625,7 +1618,8 @@ class TC_Sketchup_Face < TestUp::TestCase
 
   def test_set_texture_projection_arity
     assert_equal(2, Sketchup::Face.instance_method(
-      :set_texture_projection).arity)
+      :set_texture_projection
+    ).arity)
   end
 
   def test_set_texture_projection_invalid_arguments
@@ -1643,11 +1637,10 @@ class TC_Sketchup_Face < TestUp::TestCase
       face.set_texture_projection(1, 2)
     end
 
-    #assert_raises(TypeError) do
+    # assert_raises(TypeError) do
     #  face.set_texture_projection(nil,nil)
-    #end
+    # end
   end
-
 
   # ========================================================================== #
   # method Sketchup::Face.vertices
@@ -1679,7 +1672,7 @@ class TC_Sketchup_Face < TestUp::TestCase
     face = create_face
     result = face.vertices
     assert(result.all? { |entity| entity.is_a?(Sketchup::Vertex) },
-      'Not all entities returned were vertices.')
+      "Not all entities returned were vertices.")
   end
 
   def test_vertices_return_array_length
@@ -1715,5 +1708,4 @@ class TC_Sketchup_Face < TestUp::TestCase
       face.vertices(nil)
     end
   end
-
 end

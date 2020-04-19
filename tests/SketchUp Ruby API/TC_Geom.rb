@@ -2,14 +2,11 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
-
 
 # module Geom
 # http://www.sketchup.com/intl/developer/docs/ourdoc/geom
 class TC_Geom < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -17,7 +14,6 @@ class TC_Geom < TestUp::TestCase
   def teardown
     # ...
   end
-
 
   def get_2d_polygon
     [
@@ -28,7 +24,6 @@ class TC_Geom < TestUp::TestCase
       Geom::Point3d.new(2, 10, 0)
     ]
   end
-
 
   # ========================================================================== #
   # module Geom
@@ -43,7 +38,6 @@ class TC_Geom < TestUp::TestCase
     plane1 = [Geom::Point3d.new(0, 0, 0), Geom::Vector3d.new(0, 0, 1)]
     plane2 = [0, 0, 1, 0]
   end
-
 
   # ========================================================================== #
   # method Geom.closest_points
@@ -150,7 +144,7 @@ class TC_Geom < TestUp::TestCase
     valid_line = [Geom::Point3d.new(1, 2, 3), Geom::Vector3d.new(1, 2, 4)]
 
     assert_raises(ArgumentError, "No arguments") do
-      Geom.closest_points()
+      Geom.closest_points
     end
 
     assert_raises(ArgumentError, "One argument") do
@@ -161,7 +155,6 @@ class TC_Geom < TestUp::TestCase
       Geom.closest_points(valid_line, valid_line, valid_line)
     end
   end
-
 
   # ========================================================================== #
   # method Geom.fit_plane_to_points
@@ -183,10 +176,10 @@ class TC_Geom < TestUp::TestCase
 
     result = Geom.fit_plane_to_points(point1, point2, point3, point4, point5)
     a, b, c, d = result
-    assert_in_delta( 0.9072822708402576,   a, SKETCHUP_FLOAT_TOLERANCE, 'A')
-    assert_in_delta(-0.4204478816088999,   b, SKETCHUP_FLOAT_TOLERANCE, 'B')
-    assert_in_delta( 0.007903155669340222, c, SKETCHUP_FLOAT_TOLERANCE, 'C')
-    assert_in_delta(-18.05080754877307,    d, SKETCHUP_FLOAT_TOLERANCE, 'D')
+    assert_in_delta(0.9072822708402576, a, SKETCHUP_FLOAT_TOLERANCE, "A")
+    assert_in_delta(-0.4204478816088999, b, SKETCHUP_FLOAT_TOLERANCE, "B")
+    assert_in_delta(0.007903155669340222, c, SKETCHUP_FLOAT_TOLERANCE, "C")
+    assert_in_delta(-18.05080754877307, d, SKETCHUP_FLOAT_TOLERANCE, "D")
   end
 
   def test_fit_plane_to_points_three_points
@@ -277,7 +270,7 @@ class TC_Geom < TestUp::TestCase
     point2 = Geom::Point3d.new(25, 25, 25)
 
     assert_raises(ArgumentError, "No arguments") do
-      Geom.fit_plane_to_points()
+      Geom.fit_plane_to_points
     end
 
     assert_raises(ArgumentError, "Two arguments") do
@@ -301,7 +294,6 @@ class TC_Geom < TestUp::TestCase
       Geom.fit_plane_to_points([point1, point2])
     end
   end
-
 
   # ========================================================================== #
   # method Geom.intersect_line_line
@@ -380,7 +372,7 @@ class TC_Geom < TestUp::TestCase
     valid_line = [Geom::Point3d.new(1, 2, 3), Geom::Vector3d.new(1, 2, 4)]
 
     assert_raises(ArgumentError, "No arguments") do
-      Geom.intersect_line_line()
+      Geom.intersect_line_line
     end
 
     assert_raises(ArgumentError, "One argument") do
@@ -392,7 +384,6 @@ class TC_Geom < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Geom.intersect_line_plane
   # http://www.sketchup.com/intl/developer/docs/ourdoc/geom#intersect_line_plane
@@ -401,14 +392,14 @@ class TC_Geom < TestUp::TestCase
     # Defines a line parallell to the X axis, offset 20 units.
     line = [Geom::Point3d.new(-10, 20, 0), Geom::Vector3d.new(1, 0, 0)]
     # Defines a plane with it's normal parallel to the x axis.
-    plane = [Geom::Point3d.new(10, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
+    plane = [Geom::Point3d.new(10, 0, 0), Geom::Vector3d.new(1, 0, 0)]
     # This will return a point Point3d(10, 20, 0).
     point = Geom.intersect_line_plane(line, plane)
   end
 
   def test_intersect_line_plane
     line = [Geom::Point3d.new(-10, 20, 0), Geom::Vector3d.new(1, 0, 0)]
-    plane = [Geom::Point3d.new(10, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
+    plane = [Geom::Point3d.new(10, 0, 0), Geom::Vector3d.new(1, 0, 0)]
 
     result = Geom.intersect_line_plane(line, plane)
     expect = Geom::Point3d.new(10, 20, 0)
@@ -417,7 +408,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_intersect_line_plane_not_intersecting
     line = [Geom::Point3d.new(-10, 20, 0), Geom::Vector3d.new(0, 1, 0)]
-    plane = [Geom::Point3d.new(10, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
+    plane = [Geom::Point3d.new(10, 0, 0), Geom::Vector3d.new(1, 0, 0)]
 
     result = Geom.intersect_line_plane(line, plane)
     assert_nil(result)
@@ -425,7 +416,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_intersect_line_plane_line_on_plane
     line = [Geom::Point3d.new(10, 20, 0), Geom::Vector3d.new(0, 1, 0)]
-    plane = [Geom::Point3d.new(10, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
+    plane = [Geom::Point3d.new(10, 0, 0), Geom::Vector3d.new(1, 0, 0)]
 
     result = Geom.intersect_line_plane(line, plane)
     assert_nil(result)
@@ -435,7 +426,7 @@ class TC_Geom < TestUp::TestCase
     line_with_nil = [Geom::Point3d.new(1, 2, 3), nil]
     line_with_string = [Geom::Point3d.new(1, 2, 3), "Hello!"]
     line_with_number = [Geom::Point3d.new(1, 2, 3), 123]
-    plane = [Geom::Point3d.new(10, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
+    plane = [Geom::Point3d.new(10, 0, 0), Geom::Vector3d.new(1, 0, 0)]
 
     assert_raises(ArgumentError, "Array with nil") do
       Geom.intersect_line_plane(line_with_nil, plane)
@@ -471,7 +462,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_intersect_line_plane_invalid_arguments
     line = [Geom::Point3d.new(1, 2, 3), Geom::Vector3d.new(1, 2, 4)]
-    plane = [Geom::Point3d.new(10, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
+    plane = [Geom::Point3d.new(10, 0, 0), Geom::Vector3d.new(1, 0, 0)]
 
     assert_raises(TypeError, "Plane argument with nil") do
       Geom.intersect_line_plane(line, nil)
@@ -500,10 +491,10 @@ class TC_Geom < TestUp::TestCase
 
   def test_intersect_line_plane_incorrect_number_of_arguments
     line = [Geom::Point3d.new(1, 2, 3), Geom::Vector3d.new(1, 2, 4)]
-    plane = [Geom::Point3d.new(10, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
+    plane = [Geom::Point3d.new(10, 0, 0), Geom::Vector3d.new(1, 0, 0)]
 
     assert_raises(ArgumentError, "No arguments") do
-      Geom.intersect_line_plane()
+      Geom.intersect_line_plane
     end
 
     assert_raises(ArgumentError, "One argument") do
@@ -515,23 +506,22 @@ class TC_Geom < TestUp::TestCase
     end
   end
 
-
   # ========================================================================== #
   # method Geom.intersect_plane_plane
   # http://www.sketchup.com/intl/developer/docs/ourdoc/geom#intersect_plane_plane
 
   def test_intersect_plane_plane_api_example
     # Defines a plane with it's normal parallel to the x axis.
-    plane1 = [Geom::Point3d.new(10, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
+    plane1 = [Geom::Point3d.new(10, 0, 0), Geom::Vector3d.new(1, 0, 0)]
     # Defines a plane with it's normal parallel to the y axis.
-    plane2 = [Geom::Point3d.new(0, 20 ,0), Geom::Vector3d.new(0, 1, 0)]
+    plane2 = [Geom::Point3d.new(0, 20, 0), Geom::Vector3d.new(0, 1, 0)]
     # This will return a line [Point3d(10, 20, 0), Vector3d(0, 0, 1)].
     line = Geom.intersect_plane_plane(plane1, plane2)
   end
 
   def test_intersect_plane_plane
-    plane1 = [Geom::Point3d.new(10, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
-    plane2 = [Geom::Point3d.new(0, 20 ,0), Geom::Vector3d.new(0, 1, 0)]
+    plane1 = [Geom::Point3d.new(10, 0, 0), Geom::Vector3d.new(1, 0, 0)]
+    plane2 = [Geom::Point3d.new(0, 20, 0), Geom::Vector3d.new(0, 1, 0)]
 
     result = Geom.intersect_plane_plane(plane1, plane2)
     expect = [Geom::Point3d.new(10, 20, 0), Geom::Vector3d.new(0, 0, 1)]
@@ -539,8 +529,8 @@ class TC_Geom < TestUp::TestCase
   end
 
   def test_intersect_plane_plane_not_intersecting
-    plane1 = [Geom::Point3d.new(10, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
-    plane2 = [Geom::Point3d.new(20, 0 ,0), Geom::Vector3d.new(1, 0, 0)]
+    plane1 = [Geom::Point3d.new(10, 0, 0), Geom::Vector3d.new(1, 0, 0)]
+    plane2 = [Geom::Point3d.new(20, 0, 0), Geom::Vector3d.new(1, 0, 0)]
 
     result = Geom.intersect_plane_plane(plane1, plane2)
     assert_nil(result)
@@ -593,7 +583,7 @@ class TC_Geom < TestUp::TestCase
     plane = [Geom::Point3d.new(1, 2, 3), Geom::Vector3d.new(1, 2, 4)]
 
     assert_raises(ArgumentError, "No arguments") do
-      Geom.intersect_plane_plane()
+      Geom.intersect_plane_plane
     end
 
     assert_raises(ArgumentError, "One argument") do
@@ -604,7 +594,6 @@ class TC_Geom < TestUp::TestCase
       Geom.intersect_plane_plane(plane, plane, plane)
     end
   end
-
 
   # ========================================================================== #
   # method Geom.linear_combination
@@ -701,7 +690,7 @@ class TC_Geom < TestUp::TestCase
     point = Geom::Point3d.new(10, 10, 10)
 
     assert_raises(ArgumentError, "No arguments") do
-      Geom.intersect_plane_plane()
+      Geom.intersect_plane_plane
     end
 
     assert_raises(ArgumentError, "One argument") do
@@ -720,7 +709,6 @@ class TC_Geom < TestUp::TestCase
       Geom.intersect_plane_plane(0.5, point, 0.5, point, 0.5)
     end
   end
-
 
   # ========================================================================== #
   # method Geom.point_in_polygon_2D
@@ -745,7 +733,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_2D_inside_polygon
     point = Geom::Point3d.new(3, 3, 0)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     result = Geom.point_in_polygon_2D(point, polygon, true)
     assert_equal(true, result)
@@ -753,7 +741,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_2D_outside_polygon
     point = Geom::Point3d.new(9, 5, 0)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     result = Geom.point_in_polygon_2D(point, polygon, true)
     assert_equal(false, result)
@@ -761,7 +749,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_2D_outside_polygon_reverse
     point = Geom::Point3d.new(9, 5, 0)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     result = Geom.point_in_polygon_2D(point, polygon.reverse, true)
     assert_equal(false, result)
@@ -769,7 +757,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_2D_on_border_should_be_true
     point = Geom::Point3d.new(4, 2, 0)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     result = Geom.point_in_polygon_2D(point, polygon, true)
     assert_equal(true, result)
@@ -777,7 +765,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_2D_on_border_should_be_false
     point = Geom::Point3d.new(4, 2, 0)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     result = Geom.point_in_polygon_2D(point, polygon, false)
     assert_equal(false, result)
@@ -785,7 +773,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_2D_on_border_non_boolean_values
     point = Geom::Point3d.new(4, 2, 0)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     result = Geom.point_in_polygon_2D(point, polygon, nil)
     assert_equal(false, result, "Should evaluate to false")
@@ -796,7 +784,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_2D_ignore_z
     point = Geom::Point3d.new(3, 3, 200)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     result = Geom.point_in_polygon_2D(point, polygon, true)
     assert_equal(true, result)
@@ -804,7 +792,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_invalid_nil_arguments
     point = Geom::Point3d.new(3, 3, 200)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     assert_raises(ArgumentError, "1. argument with nil") do
       Geom.point_in_polygon_2D(nil, polygon, false)
@@ -817,7 +805,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_invalid_string_arguments
     point = Geom::Point3d.new(3, 3, 200)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     assert_raises(ArgumentError, "1. argument with string") do
       Geom.point_in_polygon_2D("Cheese!", polygon, false)
@@ -830,7 +818,7 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_invalid_polygon_arguments
     point = Geom::Point3d.new(3, 3, 200)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     polygon[2] = nil
     assert_raises(ArgumentError, "Polygon with nil") do
@@ -850,24 +838,22 @@ class TC_Geom < TestUp::TestCase
 
   def test_point_in_polygon_incorrect_number_of_arguments
     point = Geom::Point3d.new(3, 3, 200)
-    polygon = get_2d_polygon()
+    polygon = get_2d_polygon
 
     assert_raises(ArgumentError, "No arguments") do
-       Geom.point_in_polygon_2D()
+      Geom.point_in_polygon_2D
     end
 
     assert_raises(ArgumentError, "One argument") do
-       Geom.point_in_polygon_2D(point)
+      Geom.point_in_polygon_2D(point)
     end
 
     assert_raises(ArgumentError, "Two argument") do
-       Geom.point_in_polygon_2D(point, polygon)
+      Geom.point_in_polygon_2D(point, polygon)
     end
 
     assert_raises(ArgumentError, "Four arguments") do
-       Geom.point_in_polygon_2D(point, polygon, true, 123)
+      Geom.point_in_polygon_2D(point, polygon, true, 123)
     end
   end
-
-
 end # class

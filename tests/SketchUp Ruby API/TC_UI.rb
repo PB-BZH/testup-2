@@ -2,15 +2,12 @@
 # License:: The MIT License (MIT)
 # Original Author:: Thomas Thomassen
 
-
 require "testup/testcase"
 require "fileutils"
-
 
 # module UI
 # http://www.sketchup.com/intl/en/developer/docs/ourdoc/ui
 class TC_UI < TestUp::TestCase
-
   def setup
     # ...
   end
@@ -18,7 +15,6 @@ class TC_UI < TestUp::TestCase
   def teardown
     # ...
   end
-
 
   # ========================================================================== #
   # method Sketchup.select_directory
@@ -75,7 +71,7 @@ class TC_UI < TestUp::TestCase
     # Automate: Ensure that multiple items can be selected.
     result = UI.select_directory(select_multiple: true)
     assert_kind_of(Array, result)
-    assert(result.all? { |item| item.is_a?(String)})
+    assert(result.all? { |item| item.is_a?(String) })
   end
 
   def test_select_directory_directory_argument
@@ -90,7 +86,7 @@ class TC_UI < TestUp::TestCase
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     skip("Needs manual testing until we can automate UI.")
     # Automate: Ensure the dialog starting directory is set.
-    directory = __dir__.gsub("\\", "/")
+    directory = __dir__.tr("\\", "/")
     result = UI.select_directory(directory: directory)
     assert_kind_of(String, result)
   end
@@ -99,7 +95,7 @@ class TC_UI < TestUp::TestCase
     skip("Implemented in SU2015") if Sketchup.version.to_i < 15
     skip("Needs manual testing until we can automate UI.")
     # Automate: Ensure the dialog starting directory is set.
-    directory = __dir__.gsub("/", "\\")
+    directory = __dir__.tr("/", "\\")
     result = UI.select_directory(directory: directory)
     assert_kind_of(String, result)
   end
@@ -160,5 +156,4 @@ class TC_UI < TestUp::TestCase
     # Unknown options should be silently ignored.
     UI.select_directory(bogus: 123)
   end
-
 end # class
