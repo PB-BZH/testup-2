@@ -1,8 +1,11 @@
 module SKUI
-  require File.join(PATH, "checkbox.rb")
+
+  require File.join( PATH, 'checkbox.rb' )
+
 
   # @since 1.0.0
   class RadioButton < Checkbox
+
     # @return [RadioButton]
     # @since 1.0.0
     def checked_sibling
@@ -12,7 +15,8 @@ module SKUI
     # @return [Array<RadioButton>]
     # @since 1.0.0
     def siblings
-      parent.controls.grep(RadioButton)
+      parent.controls.grep( RadioButton )
     end
+
   end # class
 end # module

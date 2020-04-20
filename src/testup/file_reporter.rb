@@ -5,135 +5,138 @@
 #
 #-------------------------------------------------------------------------------
 
-require "json"
-require "pp"
-require "testup/minitest_setup.rb"
-require "testup/app_files.rb"
+
+require 'json'
+require 'pp'
+require 'testup/minitest_setup.rb'
+require 'testup/app_files.rb'
+
 
 module TestUp
-  # Based on Minitest::SummaryReporter
-  class FileReporter < MiniTest::StatisticsReporter
-    include AppFiles
+# Based on Minitest::SummaryReporter
+class FileReporter < MiniTest::StatisticsReporter
 
-    attr_accessor :sync
-    attr_accessor :old_sync
+  include AppFiles
 
-    def initialize(options)
-      super(create_log_file, options)
-    end
+  attr_accessor :sync
+  attr_accessor :old_sync
 
-    def start
-      super
+  def initialize(options)
+    super(create_log_file, options)
+  end
 
-      create_run_log(options)
+  def start
+    super
 
-      # TestUp create a really long and noisy filter string. We don't want to
-      # output this.
-      # TODO(thomthom): See if the filter string from TestUp's webdialog can
-      # be simplified when running all tests in a unit.
-      opts = options.dup
-      opts.delete(:filter)
-      opts.delete(:args)
-      opts.delete(:io)
-      opts_str = JSON.pretty_generate(opts)
+    create_run_log(options)
 
-      io.puts "SketchUp: #{Sketchup.version}"
-      io.puts "    Ruby: #{RUBY_VERSION}"
-      io.puts "  TestUp: #{PLUGIN_VERSION}"
-      io.puts "Minitest: #{Minitest::VERSION}"
-      io.puts
-      io.puts "Platform: #{Sketchup.platform}"
-      io.puts "  Locale: #{Sketchup.get_locale}"
-      io.puts
-      io.puts "Run options: #{opts_str}"
-      io.puts
-      io.puts "# Running:"
-      io.puts
+    # TestUp create a really long and noisy filter string. We don't want to
+    # output this.
+    # TODO(thomthom): See if the filter string from TestUp's webdialog can
+    # be simplified when running all tests in a unit.
+    opts = options.dup
+    opts.delete(:filter)
+    opts.delete(:args)
+    opts.delete(:io)
+    opts_str = JSON.pretty_generate(opts)
 
-      self.sync = io.respond_to? :"sync=" # stupid emacs
-      self.old_sync, io.sync = io.sync, true if sync
-    end
+    io.puts "SketchUp: #{Sketchup.version}"
+    io.puts "    Ruby: #{RUBY_VERSION}"
+    io.puts "  TestUp: #{PLUGIN_VERSION}"
+    io.puts "Minitest: #{Minitest::VERSION}"
+    io.puts
+    io.puts "Platform: #{Sketchup.platform}"
+    io.puts "  Locale: #{Sketchup.get_locale}"
+    io.puts
+    io.puts "Run options: #{opts_str}"
+    io.puts
+    io.puts "# Running:"
+    io.puts
 
-    def report
-      super
+    self.sync = io.respond_to? :"sync=" # stupid emacs
+    self.old_sync, io.sync = io.sync, true if self.sync
+  end
 
-      io.sync = old_sync
+  def report
+    super
 
-      io.puts unless options[:verbose] # finish the dots
-      io.puts
-      io.puts statistics
-      io.puts aggregated_results
-      io.puts summary
-    ensure
-      io.flush
-      io.close
-    end
+    io.sync = self.old_sync
 
-    def record(result)
-      super
-      io.puts "%s#%s = %.2f s = %s" % [result.class,
-                                       result.name,
-                                       result.time,
-                                       result.result_code]
-    end
+    io.puts unless options[:verbose] # finish the dots
+    io.puts
+    io.puts statistics
+    io.puts aggregated_results
+    io.puts summary
 
-    def statistics
-      "Finished in %.6fs, %.4f runs/s, %.4f assertions/s." %
-        [total_time, count / total_time, assertions / total_time]
-    end
+  ensure
+    io.flush
+    io.close
+  end
 
-    def aggregated_results
-      filtered_results = results.dup
-      filtered_results.reject!(&:skipped?) unless options[:verbose]
+  def record(result)
+    super
+    io.puts "%s#%s = %.2f s = %s" % [result.class,
+                                     result.name,
+                                     result.time,
+                                     result.result_code]
+  end
 
-      s = filtered_results.each_with_index.map { |result, i|
-        "\n%3d) %s" % [i + 1, result]
-      }.join("\n") + "\n"
+  def statistics
+    "Finished in %.6fs, %.4f runs/s, %.4f assertions/s." %
+      [total_time, count / total_time, assertions / total_time]
+  end
 
-      s
-    end
+  def aggregated_results
+    filtered_results = results.dup
+    filtered_results.reject!(&:skipped?) unless options[:verbose]
 
-    alias to_s aggregated_results
+    s = filtered_results.each_with_index.map { |result, i|
+      "\n%3d) %s" % [i+1, result]
+    }.join("\n") + "\n"
 
-    def summary
-      extra = ""
+    s
+  end
 
-      unless options[:verbose] || ENV["MT_NO_SKIP_MSG"]
-        extra = "\n\nYou have skipped tests. Run with --verbose for details." if
-          results.any?(&:skipped?)
-      end
+  alias to_s aggregated_results
 
-      "%d runs, %d assertions, %d failures, %d errors, %d skips%s" %
-        [count, assertions, failures, errors, skips, extra]
-    end
+  def summary
+    extra = ""
 
-    private
+    extra = "\n\nYou have skipped tests. Run with --verbose for details." if
+      results.any?(&:skipped?) unless options[:verbose] or ENV["MT_NO_SKIP_MSG"]
 
-    def log_basename
-      # File system friendly version of ISO 8601. Makes the logs be sortable in
-      # the file browser.
-      version = Sketchup.version.split(".").first
-      timestamp = Time.now.strftime("%F_%H-%M-%S")
-      "testup_#{timestamp}_su#{version}"
-    end
+    "%d runs, %d assertions, %d failures, %d errors, %d skips%s" %
+      [count, assertions, failures, errors, skips, extra]
+  end
 
-    def create_run_log(options)
-      tests = options[:filter].scan(/[(|]([A-za-z0-9#_]+)/).flatten.sort
-      log = {
-        seed: options[:seed],
-        tests: tests
-      }
-      filename = "su#{log_basename}.run"
-      filepath = File.join(log_path, filename)
-      puts "Run log: #{filepath}"
-      File.write(filepath, JSON.pretty_generate(log))
-    end
+  private
 
-    def create_log_file
-      filename = "#{log_basename}.log"
-      filepath = File.join(log_path, filename)
-      puts "Logging to: #{filepath}"
-      File.open(filepath, "w")
-    end
-  end # class
+  def log_basename
+    # File system friendly version of ISO 8601. Makes the logs be sortable in
+    # the file browser.
+    version = Sketchup.version.split('.').first
+    timestamp = Time.now.strftime('%F_%H-%M-%S')
+    "testup_#{timestamp}_su#{version}"
+  end
+
+  def create_run_log(options)
+    tests = options[:filter].scan(/[(|]([A-za-z0-9#_]+)/).flatten.sort
+    log = {
+      seed: options[:seed],
+      tests: tests
+    }
+    filename = "su#{log_basename}.run"
+    filepath = File.join(log_path, filename)
+    puts "Run log: #{filepath}"
+    File.write(filepath, JSON.pretty_generate(log))
+  end
+
+  def create_log_file
+    filename = "#{log_basename}.log"
+    filepath = File.join(log_path, filename)
+    puts "Logging to: #{filepath}"
+    File.open(filepath, 'w')
+  end
+
+end # class
 end # module TestUp

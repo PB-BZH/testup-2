@@ -1,10 +1,13 @@
 module SKUI
-  require File.join(PATH, "debug.rb")
+
+  require File.join( PATH, 'debug.rb' )
+
 
   # @since 1.0.0
   module Events
+
     # In order to create an class instance variable for each control type that
-    # holds a list of the valid events for the control this
+    # holds a list of the valid events for the control this 
     #
     # Adapted from:
     # http://www.railstips.org/blog/archives/2006/11/18/class-and-instance-variables-in-ruby/
@@ -13,12 +16,12 @@ module SKUI
     # @param [Module] including_module
     #
     # @since 1.0.0
-    def self.included(including_module)
+    def self.included( including_module )
       # Hash table of valid events for the class.
       # >   Key: (Symbol)
       # > Value: (Symbol)
-      including_module.instance_variable_set(:@control_events, {})
-      including_module.extend(EventDefinitions)
+      including_module.instance_variable_set( :@control_events, {} )
+      including_module.extend( EventDefinitions )
     end
 
     # @since 1.0.0
@@ -28,7 +31,7 @@ module SKUI
       # Each event is an array of Proc's.
       @events = {}
     end
-
+    
     # Adds an event handler to the stack. Each event can have multiple handlers.
     #
     # @param [Symbol] event
@@ -36,18 +39,18 @@ module SKUI
     #
     # @return [nil]
     # @since 1.0.0
-    def add_event_handler(event, &block)
-      unless self.class.has_event?(event)
-        raise(ArgumentError, "Event #{event} not defined for #{self.class}")
+    def add_event_handler( event, &block )
+      unless self.class.has_event?( event )
+        raise( ArgumentError, "Event #{event} not defined for #{self.class}" )
       end
       unless block_given?
-        raise(ArgumentError, "No block given.")
+        raise( ArgumentError, 'No block given.' )
       end
       @events[event] ||= []
       @events[event] << block
       nil
     end
-    alias on add_event_handler
+    alias :on :add_event_handler
 
     # Detaches all event handlers. Useful when one want to allow the objects to
     # be garbage collected.
@@ -58,7 +61,7 @@ module SKUI
       @events.clear
       nil
     end
-
+    
     # Triggers the given event. All attached procs for the given event will be
     # called. If any event handler raises an error the remaining handlers will
     # not be executed.
@@ -68,20 +71,20 @@ module SKUI
     #
     # @return [Boolean]
     # @since 1.0.0
-    def trigger_event(event, *args)
-      # Debug.puts( "#{self.class}.trigger_event(#{event.to_s})" )
-      # Debug.puts( args.inspect )
-      if @events.key?(event)
-        @events[event].each do |proc|
+    def trigger_event( event, *args )
+      #Debug.puts( "#{self.class}.trigger_event(#{event.to_s})" )
+      #Debug.puts( args.inspect )
+      if @events.key?( event )
+        @events[event].each { |proc|
           # Add self to argument list so the called event can get the handle for
           # the control triggering it.
           if args.empty?
-            proc.call(self)
+            proc.call( self )
           else
-            args.unshift(self)
-            proc.call(*args)
+            args.unshift( self )
+            proc.call( *args )
           end
-        end
+        }
         true
       else
         false
@@ -92,6 +95,7 @@ module SKUI
     #
     # @since 1.0.0
     module EventDefinitions
+      
       # When a new class inherits the class that include Events we want to make
       # sure that the event definitions of the superclass is cascaded into the
       # subclass. This is done here by copying the event defintions.
@@ -99,9 +103,9 @@ module SKUI
       # @param [Class] subclass
       #
       # @since 1.0.0
-      def inherited(subclass)
-        parent_events = instance_variable_get(:@control_events).dup
-        subclass.instance_variable_set(:@control_events, parent_events)
+      def inherited( subclass )
+        parent_events = instance_variable_get( :@control_events ).dup
+        subclass.instance_variable_set( :@control_events, parent_events )
       end
 
       # Defines an event for the control. If an event is not defined it cannot
@@ -112,10 +116,10 @@ module SKUI
       #
       # @return [Nil]
       # @since 1.0.0
-      def define_event(*args)
-        args.each do |event|
-          unless event.is_a?(Symbol)
-            raise(ArgumentError, "Expected a Symbol")
+      def define_event( *args )
+        for event in args
+          unless event.is_a?( Symbol )
+            raise( ArgumentError, 'Expected a Symbol' )
           end
           @control_events[event] = event
         end
@@ -129,12 +133,14 @@ module SKUI
       def events
         @control_events.keys
       end
-
+      
       # @return [Array<Symbol>]
       # @since 1.0.0
-      def has_event?(event)
-        @control_events.key?(event)
+      def has_event?( event )
+        @control_events.key?( event )
       end
+      
     end # module EventDefinitions
+
   end # module Events
 end # module
